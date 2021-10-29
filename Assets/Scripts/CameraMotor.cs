@@ -1,4 +1,4 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,16 +8,16 @@ public class CameraMotor : MonoBehaviour
     public Transform lookAt;
     public float boundX = 5f;
     public float boundY = 5f;
+    float timeToLastTouch;
 
-    Vector3 lastPos ;
     Vector3 mousePos;
 
     void LateUpdate()
     {
-
-
         Vector3 delta = Vector3.zero;
-
+        
+        Vector3 lastPos = Vector3.zero; 
+        //Vector3 mousePos = Vector3.zero;
         float deltaX = lookAt.position.x - transform.position.x;
         if (deltaX > boundX || deltaX < -boundX)
         {
@@ -44,36 +44,37 @@ public class CameraMotor : MonoBehaviour
         }
 
         // Camera movement with touch
-        // From original position to new position
-        // Move camera towards the opposite direction
-        // if touch 
-        // get touch position
-        // last touch position = touch position
-        // dir = last position - current touch position
-        // delta.x =  lasttouch.x  - touch.x
-        if (Input.GetMouseButton(0))
-        {
-            lastPos = mousePos;
-            mousePos = Input.mousePosition;
+        //if (Input.GetMouseButton(0))
+        //{
+        //    lastPos = mousePos;
+        //    mousePos = Input.mousePosition;
 
-            //delta.x = lastPos.x - mousePos.x;
-            //delta.y = lastPos.y - mousePos.y;
-            if(lastPos != Vector3.zero)
-            {
-                delta.x = mousePos.x - lastPos.x;
-                delta.y = mousePos.y - lastPos.y;
+        //    //delta.x = lastPos.x - mousePos.x;
+        //    //delta.y = lastPos.y - mousePos.y;
+        //    if(lastPos != Vector3.zero)
+        //    {
+        //        delta.x = mousePos.x - lastPos.x;
+        //        delta.y = mousePos.y - lastPos.y;
 
-            }
+        //    }
 
-            delta = delta * 0.1f;
-            Debug.Log("Delta: " + delta);
-            Debug.Log("Last pos: " + lastPos);
-            Debug.Log("Mouse pos: " + mousePos);
-        }
+        //    delta = delta * 0.1f;
+
+        //}
+        //else if(!Input.GetMouseButton(0))
+        //{
+        //    mousePos = Vector3.zero;
+        //}
+
+        lastPos = Vector3.zero;
+        //Debug.Log("Delta: " + delta);
+        //Debug.Log("Last pos: " + lastPos);
+        //Debug.Log("Mouse pos: " + mousePos);
 
         // Zoom in
 
         // Zoom out
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
