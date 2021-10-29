@@ -11,9 +11,12 @@ public class PlayerMovement : MonoBehaviour
     BoxCollider boxCollider;
     Vector3 moveDelta;
 
+    RaycastHit hit;
+    bool isHit;
     GameObject lastHit;
     Vector3 collision = Vector3.zero;
 
+    bool canMove;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,13 +31,6 @@ public class PlayerMovement : MonoBehaviour
         float x = joystick.Horizontal;
         float y = joystick.Vertical;
 
-        //Debug.Log(x);
-        //Debug.Log(y);
-        //float x = Input.GetAxisRaw("Horizontal");
-        //float y = Input.GetAxisRaw("Vertical");
-
-        //horizontalMove = joystick.Horizontal * runSpeed;
-
         // Reset moveDelta
         moveDelta = new Vector3(x, y, 0);
 
@@ -48,45 +44,46 @@ public class PlayerMovement : MonoBehaviour
         //    transform.localScale = new Vector3(-1, 1, 1);
         //}
 
-        // Insert collision checker code
-        // Check if there is anything along the sides of the player
-        // If nothing is infront of the collider, player can move forward
-        // else player cannot move
-
-
-        // Move
+        // Moving
         transform.Translate(moveDelta * Time.deltaTime * moveSpeed);
 
-        Vector3 up = transform.TransformDirection(Vector3.up) * 4 / 10;
-        Debug.DrawRay(transform.position, up, Color.green);
-        var ray = new Ray(this.transform.localPosition, up);
-        RaycastHit hit;
+        //Vector3 up = transform.TransformDirection(Vector3.up) * 4 / 10;
+        ////Debug.DrawRay(transform.position, up, Color.green);
+        //Vector3 down = transform.TransformDirection(Vector3.up) * -4 / 10;
+        ////Debug.DrawRay(transform.position, down, Color.green);
+        //Vector3 right = transform.TransformDirection(Vector3.right) * 4 / 10;
+        ////Debug.DrawRay(transform.position, right, Color.green);
+        //Vector3 left = transform.TransformDirection(Vector3.right) * -4 / 10;
+        ////Debug.DrawRay(transform.position, left, Color.green);
 
-        // Shoot ray
-        // Check if hit is on a particular layer
-        // If ray is touching something, player cannot move that way
-        // If ray is not touching anything, player can move
-
-        Vector3 down = transform.TransformDirection(Vector3.up) * -4 / 10;
-        Debug.DrawRay(transform.position, down, Color.green);
-
-        Vector3 right = transform.TransformDirection(Vector3.right) * 4 / 10;
-        Debug.DrawRay(transform.position, right, Color.green);
-
-        Vector3 left = transform.TransformDirection(Vector3.right) * -4 / 10;
-        Debug.DrawRay(transform.position, left, Color.green);
-        //hit = Physics.BoxCast(transform.position, boxCollider.size, 0, new Vector3(0, moveDelta.y,0), Mathf.Abs(moveDelta * Time.deltaTime), LayerMask.GetMask("Actor", "Blocking"));
-        //Debug.Log(hit);
-        //if (hit.collider == null)
-        //{
-
-        //}
-
-        //hit = Physics.BoxCast(transform.position, boxCollider.size, 0, new Vector3(moveDelta.x, 0, 0), Mathf.Abs(moveDelta * Time.deltaTime), LayerMask.GetMask("Actor", "Blocking"));
-        //Debug.Log(hit);
-        //if (hit.collider == null)
-        //{
-        //    transform.Translate(moveDelta * Time.deltaTime * moveSpeed);
-        //}
     }
+
+    //void OnDrawGizmos()
+    //{
+    //    if (isHit)
+    //    {
+    //        Debug.Log("Hit shit");
+    //        Gizmos.DrawRay(transform.position, transform.forward * hit.distance);
+    //        Gizmos.DrawWireCube(transform.position + transform.forward * hit.distance, transform.localScale);
+    //    }
+    //    else
+    //    {
+    //        //Draw a Ray forward from GameObject toward the maximum distance
+    //        Gizmos.DrawRay(transform.position, transform.up * 100);
+    //        Debug.Log("No hit shit");
+    //        //Draw a cube at the maximum distance
+    //        Gizmos.DrawWireCube(transform.position + transform.up * 100, transform.localScale);
+    //    }
+    //}
+
+    //void OnCollisionEnter(Collision col)
+    //{
+    //    Debug.Log("Can Move");
+
+    //    if (col != null)
+    //    {
+    //        Debug.Log("Can Move");
+    //        canMove = false;
+    //    }
+    //}
 }
