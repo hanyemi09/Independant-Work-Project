@@ -7,11 +7,13 @@ public class CameraMotor : MonoBehaviour
 
     public Transform lookAt;
     public float boundX = 5f;
-    public float boundY = 5f;
+    public float boundZ = 5f;
     float timeToLastTouch;
 
     Vector3 mousePos;
 
+
+    // Change everything to top down view;
     void LateUpdate()
     {
         Vector3 delta = Vector3.zero;
@@ -30,16 +32,16 @@ public class CameraMotor : MonoBehaviour
                 delta.x = deltaX + boundX;
             }
         }
-        float deltaY = lookAt.position.y - transform.position.y;
-        if (deltaY > boundY || deltaY < -boundY)
+        float deltaZ = lookAt.position.z - transform.position.z;
+        if (deltaZ > boundZ || deltaZ < -boundZ)
         {
-            if (transform.position.y < lookAt.position.y)
+            if (transform.position.z < lookAt.position.z)
             {
-                delta.y = deltaY - boundY;
+                delta.z = deltaZ - boundZ;
             }
             else
             {
-                delta.y = deltaY + boundY;
+                delta.z = deltaZ + boundZ;
             }
         }
 
@@ -81,6 +83,6 @@ public class CameraMotor : MonoBehaviour
             // Update the Text on the screen depending on current position of the touch each frame
             Debug.Log(touch.position);
         }
-        transform.position += new Vector3(delta.x, delta.y, 0);
+        transform.position += new Vector3(delta.x, 0, delta.z);
     }
 }
