@@ -31,7 +31,7 @@ public class PlayerWeaponsManager : MonoBehaviour
 
     public void HandleShoot()
     {
-        if(currentActiveWeapon != null)
+        if(currentActiveWeapon != null && CanPlayerShoot())
         {
             if (timeToNextAttack > currentActiveWeapon.weaponFireRate)
             {
@@ -46,11 +46,11 @@ public class PlayerWeaponsManager : MonoBehaviour
     {
         if (isImmobilized)
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
