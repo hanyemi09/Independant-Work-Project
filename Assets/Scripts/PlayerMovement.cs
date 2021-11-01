@@ -6,8 +6,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
-    public float moveSpeed = 1f;
-    public Rigidbody rb;
+    public GameObject bulletPrefab;
 
     FixedJoystick movementJoystick;
     FixedJoystick attackJoystick;
@@ -15,21 +14,23 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit hit;
     GameObject lastHit;
 
+    Weapon weapon;
+    Transform shootPoint;
     Vector3 moveDelta;
     Vector3 collision = Vector3.zero;
     Vector3 movePos, lastPos;
-    bool isHit;
-    bool canMove;
-    bool isMoving;
-    [SerializeField]float rotationSpeed = 10f;
+    float rotationSpeed = 10f;
     float borderDirControl = 0.15f;
-
+    float moveSpeed = 5f;
+    
     // Start is called before the first frame update
     void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
         movementJoystick = GameObject.Find("MovementJoystick").GetComponent<FixedJoystick>();
         attackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
+        shootPoint = GameObject.Find("ShootPoint").GetComponent<Transform>();
+        weapon = GameObject.Find("WeaponHolder").transform.GetChild(0).GetComponent<Weapon>();
     }
 
     // Update is called once per frame
@@ -47,15 +48,19 @@ public class PlayerMovement : MonoBehaviour
             float az = attackJoystick.Vertical;
 
             // Get direction of the player is moving
-
-
-            //If player is attacking, get use the direction of attack joystick instead
+            // If player is attacking, get use the direction of attack joystick instead
             Vector3 dirAttack = new Vector3(ax, 0, az);
-            Debug.Log(dirAttack.magnitude);
+      
+            if(dirAttack.magnitude > 0)
+            {
+                if(CheckForPlayerAttackValid())
+                {
+                    PlayerAttack();
+                }
+            }
             if (dirAttack.magnitude > borderDirControl)
             {
                 dir = dirAttack;
-                Debug.Log("Enter");
             }
         }
 
@@ -68,15 +73,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
             //Debug.Log("Rotation: " + rotation);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
-        }
-
-        lastPos = movePos;
-        movePos = transform.position;
-        isMoving = true;
-
-        if (lastPos == movePos)
-        {
-            isMoving = false;
         }
 
         // Moving
@@ -94,8 +90,14 @@ public class PlayerMovement : MonoBehaviour
   
     }
 
-    public void playerAttack()
+    public bool CheckForPlayerAttackValid()
     {
+        return true;
+        // Return is player attack valid
+    }
 
+    public void PlayerAttack()
+    {
+        weapon.WeaponAttack();
     }
 }

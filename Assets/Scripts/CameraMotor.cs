@@ -6,13 +6,16 @@ public class CameraMotor : MonoBehaviour
 {
 
     public Transform lookAt;
-    public float boundX = 5f;
-    public float boundZ = 5f;
+    public float boundX = 2f;
+    public float boundZ = 2f;
     float timeToLastTouch;
 
     Vector3 mousePos;
 
-
+    void Start()
+    {
+        boundX = boundZ = 2f;
+    }
     // Change everything to top down view;
     void LateUpdate()
     {
@@ -33,7 +36,7 @@ public class CameraMotor : MonoBehaviour
             }
         }
         float deltaZ = lookAt.position.z - transform.position.z;
-        if (deltaZ > boundZ || deltaZ < -boundZ)
+        if (deltaZ > boundZ|| deltaZ < -boundZ)
         {
             if (transform.position.z < lookAt.position.z)
             {
