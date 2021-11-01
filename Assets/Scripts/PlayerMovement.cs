@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     BoxCollider boxCollider;
     RaycastHit hit;
     GameObject lastHit;
-
+    PlayerWeaponsManager playerWeaponsManager;
     Weapon weapon;
     Transform shootPoint;
     Vector3 moveDelta;
@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         attackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
         shootPoint = GameObject.Find("ShootPoint").GetComponent<Transform>();
         weapon = GameObject.Find("WeaponHolder").transform.GetChild(0).GetComponent<Weapon>();
+        playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
     }
 
     // Update is called once per frame
@@ -96,8 +97,9 @@ public class PlayerMovement : MonoBehaviour
         // Return is player attack valid
     }
 
-    public void PlayerAttack()
+    void PlayerAttack()
     {
-        weapon.WeaponAttack();
+        Debug.Log("Called");
+        playerWeaponsManager.HandleShoot();
     }
 }

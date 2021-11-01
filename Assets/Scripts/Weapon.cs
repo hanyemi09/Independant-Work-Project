@@ -13,7 +13,6 @@ public class Weapon : MonoBehaviour
 
     Transform shootPoint;
     [SerializeField]WEAPONTYPE weaponType;
-    float timeToNextAttack = 0f;
 
     WEAPONTYPE GetWeaponType()    
     {
@@ -27,7 +26,7 @@ public class Weapon : MonoBehaviour
     
     void Update()
     {
-        timeToNextAttack += Time.deltaTime;
+       
     }
 
     public void WeaponAttack()
@@ -42,12 +41,14 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    void WeaponShoot()
+    public void WeaponShoot()
     {
-        if(timeToNextAttack > weaponFireRate)
-        {
-            Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
-            timeToNextAttack = 0;
-        }
+        Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
     }
+
+    public float GetWeaponFireRate()
+    {
+        return weaponFireRate;
+    }
+
 }
