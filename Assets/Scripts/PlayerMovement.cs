@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     float rotationSpeed = 10f;
     float borderDirControl = 0.15f;
     float moveSpeed = 5f;
-    
+    Vector3 transformSize;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         shootPoint = GameObject.Find("ShootPoint").GetComponent<Transform>();
         weapon = GameObject.Find("WeaponHolder").transform.GetChild(0).GetComponent<Weapon>();
         playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
+        transformSize = transform.localScale;
     }
 
     // Update is called once per frame
@@ -82,11 +83,11 @@ public class PlayerMovement : MonoBehaviour
         // Swap sprite directions
         if (moveDelta.x > 0)
         {
-            transform.localScale = Vector3.one;
+            transform.localScale = transformSize;
         }
         else if (moveDelta.x < 0)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(transformSize.x, transformSize.y, transformSize.z);
         }
   
     }
@@ -99,7 +100,6 @@ public class PlayerMovement : MonoBehaviour
 
     void PlayerAttack()
     {
-        Debug.Log("Called");
         playerWeaponsManager.HandleShoot();
     }
 }

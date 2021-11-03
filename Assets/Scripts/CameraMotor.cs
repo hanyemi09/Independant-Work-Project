@@ -48,33 +48,7 @@ public class CameraMotor : MonoBehaviour
             }
         }
 
-        // Camera movement with touch
-        //if (Input.GetMouseButton(0))
-        //{
-        //    lastPos = mousePos;
-        //    mousePos = Input.mousePosition;
-
-        //    //delta.x = lastPos.x - mousePos.x;
-        //    //delta.y = lastPos.y - mousePos.y;
-        //    if(lastPos != Vector3.zero)
-        //    {
-        //        delta.x = mousePos.x - lastPos.x;
-        //        delta.y = mousePos.y - lastPos.y;
-
-        //    }
-
-        //    delta = delta * 0.1f;
-
-        //}
-        //else if(!Input.GetMouseButton(0))
-        //{
-        //    mousePos = Vector3.zero;
-        //}
-
         lastPos = Vector3.zero;
-        //Debug.Log("Delta: " + delta);
-        //Debug.Log("Last pos: " + lastPos);
-        //Debug.Log("Mouse pos: " + mousePos);
 
         // Zoom in
 
