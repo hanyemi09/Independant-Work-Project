@@ -8,55 +8,57 @@ public class PlayerWeaponsManager : MonoBehaviour
     Weapon[] weapon = new Weapon[2];
     Weapon currentActiveWeapon = null;
     bool isImmobilized = false;
-
     float timeToNextAttack = 0f;
+    float timeToReload = 0f;
+
     void Start()
     {
         weaponHolder = GameObject.Find("WeaponHolder");
         for(int i = 0; i < weapon.Length; i ++ )
         {
-            weapon[i] = weaponHolder.transform.GetChild(i).GetComponent<Weapon>();
+            Debug.Log(weapon.Length);
+            Debug.Log(i);
+
+            weapon[i] = weaponHolder.transform.GetChild(0).GetComponent<Weapon>();
             weapon[i].gameObject.SetActive(false);
         }
         WeaponSlotsCheck();
+        timeToReload = currentActiveWeapon.GetTimeToStartReloading();
         // Weapon slots check
     }
 
     void Update()
     {
-        //Debug.Log(currentActiveWeapon);
         timeToNextAttack += Time.deltaTime;
-        //Debug.Log(timeToNextAttack);
+        timeToReload += Time.deltaTime;
+
+        if(timeToReload > currentActiveWeapon.GetTimeToStartReloading())
+        {
+            currentActiveWeapon.WeaponReload();
+            timeToReload = 0f;
+        }
     }
 
     public void HandleShoot()
     {
-        if(currentActiveWeapon != null && CanPlayerShoot())
+        if(currentActiveWeapon != null)
         {
-            if (timeToNextAttack > currentActiveWeapon.weaponFireRate)
+            if(currentActiveWeapon.GetCurrentAmmo() > 0)
             {
-                timeToNextAttack = 0f;
-                currentActiveWeapon.WeaponShoot();
+                if (timeToNextAttack > currentActiveWeapon.GetWeaponFireRate())
+                {
+                    timeToNextAttack = 0f;
+                    timeToReload = 0f;
+                    currentActiveWeapon.WeaponShoot();
+                }
             }
-        }
-
-    }
-
-    bool CanPlayerShoot()
-    {
-        if (isImmobilized)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
         }
     }
 
     void WeaponSlotsCheck()
     {
-        for(int i = 0; i < weapon.Length; i++)
+
+        for (int i = 0; i < weapon.Length; i++)
         {
             if (currentActiveWeapon == null)
             {
@@ -100,11 +102,6 @@ public class PlayerWeaponsManager : MonoBehaviour
             }
         }
         return -1;
-    }
-
-    void AddWeapon(Weapon Weap)
-    {
-
     }
 
     public void RemoveCurrentActiveWeapon()

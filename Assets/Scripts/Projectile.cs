@@ -5,9 +5,9 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 
-    public float bulletDamage = 20f;
-    public float bulletLifetime = 3f;
-    public float bulletSpeed = 20f;
+    [SerializeField] float bulletDamage = 20f;
+    [SerializeField] float bulletLifetime = 3f;
+    [SerializeField] float bulletSpeed = 20f;
     Rigidbody rb;
     // sfx
     // vfx
@@ -26,6 +26,12 @@ public class Projectile : MonoBehaviour
         
     }
     
+    public void SetBulletDamage(float bulletDmg)
+    {
+        bulletDamage = bulletDmg;
+    }
+
+
     void OnTriggerEnter(Collider col)
     {
         Destroy(gameObject);

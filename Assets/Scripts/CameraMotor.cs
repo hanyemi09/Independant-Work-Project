@@ -14,8 +14,10 @@ public class CameraMotor : MonoBehaviour
 
     void Start()
     {
+        lookAt = GameObject.FindWithTag("Player").transform;
         boundX = boundZ = 2f;
     }
+
     // Change everything to top down view;
     void LateUpdate()
     {
