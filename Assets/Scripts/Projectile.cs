@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
 
     [SerializeField] float bulletDamage = 20f;
     [SerializeField] float bulletLifetime = 3f;
-    [SerializeField] float bulletSpeed = 20f;
+    [SerializeField] float bulletSpeed = 200f;
     Rigidbody rb;
     // sfx
     // vfx
@@ -26,11 +26,11 @@ public class Projectile : MonoBehaviour
         
     }
     
-    public void SetBulletDamage(float bulletDmg)
+    public void SetProjectileValues(float bulletDmg, float bulletSpd)
     {
         bulletDamage = bulletDmg;
+        bulletSpeed = bulletSpd;
     }
-
 
     void OnTriggerEnter(Collider col)
     {

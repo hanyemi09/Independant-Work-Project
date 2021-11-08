@@ -2,83 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponShootType
+{
+    Burst,
+    Automatic,
+    Manual,
+    Charge,
+    Throw,
+}
+
 public class Weapon : MonoBehaviour 
 {
-    private enum WEAPONTYPE {
-        MELEE, RANGED
-    };
-
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] float weaponFireRate = 0.5f;
-    [SerializeField] float weaponDamage = 1f;
-    [SerializeField] WEAPONTYPE weaponType;
-    [SerializeField] int weaponCurrentAmmo = 30;
-    [SerializeField] int weaponReloadAmount = 30;
-    [SerializeField] int weaponClipAmmo = 30;
-    [SerializeField] int weaponAmmoPerShot = 1;
-    [SerializeField] float timeToStartReload = 1.5f;
-
+    //GameObject shootVFX;
+    // ShootSFX
+    [SerializeField] Projectile bulletPrefab;
     Transform shootPoint;
 
-    WEAPONTYPE GetWeaponType()    
-    {
-        return weaponType;
-    }
+    [SerializeField] WeaponShootType weaponShootType;
+
+    [SerializeField] float projectileSpeed;
+    [SerializeField] float projectileSpread;
+
+    [SerializeField] float weaponDamage;
+    [SerializeField] float weaponFireRate;
+    [SerializeField] float weaponReloadSpeed;
+    [SerializeField] float weaponMaxAmmoPerClip;
+    [SerializeField] float weaponCurrentAmmo;
+
+    float timeSinceLastShot = 0f;
 
     void Start()
     {
-        shootPoint = GameObject.Find("ShootPoint").GetComponent<Transform>();
-        if(bulletPrefab != null)
+        shootPoint = GameObject.Find("ShootPoint").transform;
+        bulletPrefab.SetProjectileValues(weaponDamage, projectileSpeed);
+    }
+
+    void Update()
+    {
+        timeSinceLastShot += Time.deltaTime;
+    }
+
+    public void HandleShoot(Vector3 dir)
+    {
+        switch(weaponShootType)
         {
-            Projectile proj = bulletPrefab.GetComponent<Projectile>();
-            proj.SetBulletDamage(weaponDamage);
+            case WeaponShootType.Automatic:
+                TryShoot(dir);
+                break;
+            case WeaponShootType.Burst:
+                TryBurstShoot(dir);
+                break;
+
         }
     }
 
-    public void WeaponAttack()
+    void TryShoot(Vector3 shootDir)
     {
-        if(weaponType == WEAPONTYPE.MELEE)
+        if(timeSinceLastShot > weaponFireRate)
         {
-
-        }
-        else if(weaponType == WEAPONTYPE.RANGED)
-        {
-            WeaponShoot();
+            Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
+            weaponCurrentAmmo--;
+            timeSinceLastShot = 0f;
         }
     }
 
-    public void WeaponShoot()
+    void TryBurstShoot(Vector3 shootdir)
     {
-        Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
-        weaponCurrentAmmo -= weaponAmmoPerShot;
+
     }
 
-    public void WeaponReload()
+    void HandleReload()
     {
-        if(weaponCurrentAmmo < weaponClipAmmo)
-        {
-            weaponCurrentAmmo += weaponReloadAmount;
-            Mathf.Clamp(weaponCurrentAmmo, 0, weaponClipAmmo);
-        }
 
-        if(weaponCurrentAmmo > weaponClipAmmo)
-        {
-            weaponCurrentAmmo = weaponClipAmmo;
-        }
     }
 
-    public int GetCurrentAmmo()
+    void TryReload()
     {
-        return weaponCurrentAmmo;
-    }
 
-    public float GetWeaponFireRate()
-    {
-        return weaponFireRate;
-    }
-
-    public float GetTimeToStartReloading()
-    {
-        return timeToStartReload;
     }
 }

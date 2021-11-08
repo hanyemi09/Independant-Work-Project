@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     float moveSpeed = 5f;
     Vector3 transformSize;
     // Start is called before the first frame update
+
     void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
@@ -52,17 +53,16 @@ public class PlayerMovement : MonoBehaviour
             // Get direction of the player is moving
             // If player is attacking, get use the direction of attack joystick instead
             Vector3 dirAttack = new Vector3(ax, 0, az);
-      
-            if(dirAttack.magnitude > 0)
-            {
-                if(CheckForPlayerAttackValid())
-                {
-                    PlayerAttack();
-                }
-            }
+
             if (dirAttack.magnitude > borderDirControl)
             {
                 dir = dirAttack;
+            }
+
+            if (dirAttack.magnitude > 0)
+            {
+                // Attacking
+                playerWeaponsManager.HandleShoot(dir);
             }
         }
 
@@ -89,17 +89,5 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(transformSize.x, transformSize.y, transformSize.z);
         }
-  
-    }
-
-    public bool CheckForPlayerAttackValid()
-    {
-        return true;
-        // Return is player attack valid
-    }
-
-    void PlayerAttack()
-    {
-        playerWeaponsManager.HandleShoot();
     }
 }
