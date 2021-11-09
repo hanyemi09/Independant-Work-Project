@@ -12,6 +12,11 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom("yeap");
     }
 
+    public void JoinRoom()
+    {
+        PhotonNetwork.JoinRoom("yeap");
+
+    }
     public override void OnJoinedRoom()
     {
         PhotonNetwork.LoadLevel("SampleScene");
