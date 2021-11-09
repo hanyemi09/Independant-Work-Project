@@ -34,12 +34,15 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        Destroy(gameObject);
-
-        ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
-        if(colStats != null)
+        if (col.gameObject.layer != 9)
         {
-            colStats.TakeDamage(bulletDamage);
+            Destroy(gameObject);
+
+            ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
+            if(colStats != null)
+            {
+                colStats.TakeDamage(bulletDamage);
+            }
         }
     }
 }
