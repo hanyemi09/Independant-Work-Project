@@ -19,6 +19,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] Projectile bulletPrefab;
     [SerializeField] Rigidbody grenadePrefab;
     Transform shootPoint;
+    Transform throwPoint;
 
     [SerializeField] WeaponShootType weaponShootType;
 
@@ -32,13 +33,14 @@ public class Weapon : MonoBehaviour
     [SerializeField] float weaponReloadSpeed;
     [SerializeField] float weaponMaxAmmoPerClip;
     [SerializeField] float weaponCurrentAmmo;
-    float distanceMultiplier = 10f;
+    float distanceMultiplier = 4f;
     float timeSinceLastShot = 0f;
     bool burstComplete = false;
 
     void Start()
     {
         shootPoint = GameObject.Find("ShootPoint").transform;
+        throwPoint = GameObject.Find("ThrowPoint").transform;
         bulletPrefab.SetProjectileValues(weaponDamage, projectileSpeed);
     }
 
@@ -76,9 +78,7 @@ public class Weapon : MonoBehaviour
             {
                 float spread = Random.Range(-shootSpread, shootSpread);
                 Quaternion rot = shootPoint.rotation;
-                Debug.Log(rot);
                 rot.y += spread;
-                Debug.Log(rot);
                 Instantiate(bulletPrefab, shootPoint.position, rot);
                 weaponCurrentAmmo--;
                 timeSinceLastShot = 0f;
@@ -88,7 +88,7 @@ public class Weapon : MonoBehaviour
 
     IEnumerator TryBurstShoot(Vector3 shootDir)
     {
-        
+
         if (timeSinceLastShot > weaponFireRate)
         {
             burstComplete = false;
@@ -102,39 +102,44 @@ public class Weapon : MonoBehaviour
                     weaponCurrentAmmo--;
                     yield return new WaitForSeconds(0.15f);
                 }
-            }   
+            }
             burstComplete = true;
         }
     }
 
     void TryThrowGrenade(Vector3 shootDir)
     {
-        if (timeSinceLastShot > weaponFireRate)
+        if (shootDir.magnitude > 0.155f)
         {
-            //weaponCurrentAmmo--;
-            //Vector3 throwAtPosition = shootDir * distanceMultiplier;
-            //Vector3 distance = throwAtPosition - shootDir;
-            //Vector3 distanceXZ = distance;
-            //float hypo = distance.x * distance.x + distance.z * distance.z;
-            //float time = hypo / hypo / 2;
 
-            //distanceXZ.y = 0f;
+            if (timeSinceLastShot > weaponFireRate)
+            {
 
-            //float Sy = distance.y;
-            //float Sxz = distanceXZ.magnitude;
+                Vector3 throwAtPosition = shootDir * distanceMultiplier;
+                Vector3 distance = throwAtPosition - shootDir;
+                Vector3 distanceXZ = distance;
+                float hypo = distance.x * distance.x + distance.z * distance.z;
+                float time = hypo / hypo / 2;
 
-            //float Vxz = Sxz / time;
-            //float Vy = Sy / time + 0.5f * Mathf.Abs(Physics.gravity.y);
+                distanceXZ.y = 0f;
 
-            //Vector3 result = distanceXZ.normalized;
-            //result *= Vxz;
-            //result.y = Vy;
+                float Sy = distance.y;
+                float Sxz = distanceXZ.magnitude;
 
-            //Rigidbody rb = Instantiate(grenadePrefab, shootPoint.position, Quaternion.identity);
-            //rb.velocity = result;
-            //timeSinceLastShot = 0f;
+                float Vxz = Sxz / time;
+                float Vy = Sy / time + 0.5f * Mathf.Abs(Physics.gravity.y);
+
+                Vector3 result = distanceXZ.normalized;
+                result *= Vxz;
+                result.y = Vy;
+
+                Rigidbody rb = Instantiate(grenadePrefab, throwPoint.position, Quaternion.identity);
+                weaponCurrentAmmo--;
+                rb.velocity = result;
+                timeSinceLastShot = 0f;
+            }
         }
-    }
+    }   
 
     void HandleReload()
     {

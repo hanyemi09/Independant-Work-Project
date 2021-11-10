@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2438238261224373202}
   - component: {fileID: 2243940916409791538}
   m_Layer: 9
-  m_Name: BulletPistol
+  m_Name: ProjectileRifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4302f91abf1fe1d4d921f8d7a21c6938, type: 2}
+  - {fileID: 2100000, guid: 7a9e1038ae61551428e242b35d425617, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
