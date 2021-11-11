@@ -41,7 +41,10 @@ public class Weapon : MonoBehaviour
     {
         shootPoint = GameObject.Find("ShootPoint").transform;
         throwPoint = GameObject.Find("ThrowPoint").transform;
-        bulletPrefab.SetProjectileValues(weaponDamage, projectileSpeed);
+        if(bulletPrefab != null)
+        {
+            bulletPrefab.SetProjectileValues(weaponDamage, projectileSpeed);
+        }
     }
 
     void Update()
