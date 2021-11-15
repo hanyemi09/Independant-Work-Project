@@ -10,6 +10,7 @@ public enum WeaponShootType
     Charge,
     Throw,
     Shotgun,
+    Melee,
 }
 
 public class Weapon : MonoBehaviour
@@ -31,10 +32,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] float weaponDamage;
     [SerializeField] float weaponFireRate;
     [SerializeField] float weaponReloadSpeed;
+    [SerializeField] float weaponAmmoReload;
     [SerializeField] float weaponMaxAmmoPerClip;
     [SerializeField] float weaponCurrentAmmo;
+    [SerializeField] LayerMask whatIsEnemies;
     float distanceMultiplier = 4f;
     float timeSinceLastShot = 0f;
+    float timeSinceLastReload = 0f;
     bool burstComplete = false;
 
     void Start()
@@ -50,6 +54,18 @@ public class Weapon : MonoBehaviour
     void Update()
     {
         timeSinceLastShot += Time.deltaTime;
+        timeSinceLastReload += Time.deltaTime;
+
+        if(timeSinceLastShot > weaponReloadSpeed && timeSinceLastReload > weaponReloadSpeed)
+        {
+            timeSinceLastReload = 0f;
+            weaponCurrentAmmo += weaponAmmoReload;
+
+            if(weaponCurrentAmmo > weaponMaxAmmoPerClip)
+            {
+                weaponCurrentAmmo = weaponMaxAmmoPerClip;
+            }
+        }
     }
 
     public void HandleShoot(Vector3 dir)
@@ -68,8 +84,19 @@ public class Weapon : MonoBehaviour
             case WeaponShootType.Throw:
                 TryThrowGrenade(dir);
                 break;
-
+            case WeaponShootType.Melee:
+                TryMelee(dir);
+                break;
         }
+    }
+    void TryMelee(Vector3 dir)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(shootPoint.position, shootPoint.localScale.x, whatIsEnemies);
+        for(int i = 0; i < hitColliders.Length;  i++)
+        {
+            hitColliders[i].GetComponent<ObjectStatsManager>().TakeDamage(weaponDamage);
+        }
+        
     }
 
     void TryShoot(Vector3 shootDir, float pellets)

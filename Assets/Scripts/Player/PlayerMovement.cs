@@ -14,8 +14,6 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit hit;
     GameObject lastHit;
     PlayerWeaponsManager playerWeaponsManager;
-    Weapon weapon;
-    Transform shootPoint;
     Vector3 moveDelta;
     Vector3 collision = Vector3.zero;
     Vector3 movePos, lastPos;
@@ -30,8 +28,6 @@ public class PlayerMovement : MonoBehaviour
         boxCollider = GetComponent<BoxCollider>();
         movementJoystick = GameObject.Find("MovementJoystick").GetComponent<FixedJoystick>();
         attackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
-        shootPoint = GameObject.Find("ShootPoint").GetComponent<Transform>();
-        weapon = GameObject.Find("WeaponHolder").transform.GetChild(0).GetComponent<Weapon>();
         playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
         transformSize = transform.localScale;
     }
