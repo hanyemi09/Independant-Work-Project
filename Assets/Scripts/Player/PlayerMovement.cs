@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [ExecuteInEditMode]
 public class PlayerMovement : MonoBehaviour
 {
+    PhotonView view;
 
     public GameObject bulletPrefab;
 
@@ -25,65 +27,70 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+
         boxCollider = GetComponent<BoxCollider>();
         movementJoystick = GameObject.Find("MovementJoystick").GetComponent<FixedJoystick>();
         attackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
         playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
         transformSize = transform.localScale;
+        view = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        float x = movementJoystick.Horizontal;
-        float z = movementJoystick.Vertical;
-
-        Vector3 dir = new Vector3(x, 0, z);
-
-        if (attackJoystick != null)
+        if (view.IsMine)
         {
-            float ax = attackJoystick.Horizontal;
-            float az = attackJoystick.Vertical;
 
-            // Get direction of the player is moving
-            // If player is attacking, get use the direction of attack joystick instead
-            Vector3 dirAttack = new Vector3(ax, 0, az);
+            float x = movementJoystick.Horizontal;
+            float z = movementJoystick.Vertical;
 
-            if (dirAttack.magnitude > borderDirControl)
+            Vector3 dir = new Vector3(x, 0, z);
+
+            if (attackJoystick != null)
             {
-                dir = dirAttack;
+                float ax = attackJoystick.Horizontal;
+                float az = attackJoystick.Vertical;
+
+                // Get direction of the player is moving
+                // If player is attacking, get use the direction of attack joystick instead
+                Vector3 dirAttack = new Vector3(ax, 0, az);
+
+                if (dirAttack.magnitude > borderDirControl)
+                {
+                    dir = dirAttack;
+                }
+
+                if (dirAttack.magnitude > 0)
+                {
+                    // Attacking
+                    playerWeaponsManager.HandleShoot(dir);
+                }
             }
 
-            if (dirAttack.magnitude > 0)
+            // Movement will always be according to the player joystick
+            moveDelta = new Vector3(x, 0, z);
+
+            // Direction
+            if (dir != Vector3.zero)
             {
-                // Attacking
-                playerWeaponsManager.HandleShoot(dir);
+                Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
+                //Debug.Log("Rotation: " + rotation);
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
             }
-        }
 
-        // Movement will always be according to the player joystick
-        moveDelta = new Vector3(x, 0, z);
+            // Moving
+            transform.Translate(moveDelta * Time.deltaTime * moveSpeed, Space.World);
 
-        // Direction
-        if (dir != Vector3.zero)
-        {
-            Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
-            //Debug.Log("Rotation: " + rotation);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
-        }
-
-        // Moving
-        transform.Translate(moveDelta * Time.deltaTime * moveSpeed, Space.World);
-
-        // Swap sprite directions
-        if (moveDelta.x > 0)
-        {
-            transform.localScale = transformSize;
-        }
-        else if (moveDelta.x < 0)
-        {
-            transform.localScale = new Vector3(transformSize.x, transformSize.y, transformSize.z);
+            // Swap sprite directions
+            if (moveDelta.x > 0)
+            {
+                transform.localScale = transformSize;
+            }
+            else if (moveDelta.x < 0)
+            {
+                transform.localScale = new Vector3(transformSize.x, transformSize.y, transformSize.z);
+            }
         }
     }
 }
