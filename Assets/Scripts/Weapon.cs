@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public enum WeaponShootType
 {
@@ -91,7 +92,7 @@ public class Weapon : MonoBehaviour
                     TryMelee(dir);
                     break;
             }
-        }
+        }   
     }
     void TryMelee(Vector3 dir)
     {
@@ -112,7 +113,8 @@ public class Weapon : MonoBehaviour
             float spread = Random.Range(-shootSpread, shootSpread);
             Quaternion rot = shootPoint.rotation;
             rot.y += spread;
-            Instantiate(bulletPrefab, shootPoint.position, rot);
+            //Instantiate(bulletPrefab, shootPoint.position, rot);
+            //PhotonNetwork.Instantiate(bulletPrefab.name, shootPoint.position, rot);
             weaponCurrentAmmo--;
             timeSinceLastShot = 0f;
         }

@@ -8,8 +8,6 @@ public class PlayerMovement : MonoBehaviour
 {
     PhotonView view;
 
-    public GameObject bulletPrefab;
-
     FixedJoystick movementJoystick;
     FixedJoystick attackJoystick;
     BoxCollider boxCollider;
