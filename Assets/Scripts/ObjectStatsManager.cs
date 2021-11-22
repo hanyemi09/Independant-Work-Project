@@ -22,18 +22,20 @@ public class ObjectStatsManager : MonoBehaviour
     {
         if (objectHealth <= 0)
         {
-            Destroy(gameObject);
+           photonView.RPC("DestroyObject", RpcTarget.All);
         }
     }
 
     [PunRPC]
     public void TakeDamage(float damage)
     {
-        if (!photonView.IsMine)
-            return;
-
         objectHealth -= damage;
     }
 
-
+    [PunRPC]
+    void DestroyObject()
+    {
+        if (photonView.IsMine)
+            PhotonNetwork.Destroy(gameObject);
+    }
 }

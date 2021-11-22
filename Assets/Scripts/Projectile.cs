@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Projectile : MonoBehaviour
 {
@@ -10,14 +11,15 @@ public class Projectile : MonoBehaviour
         BULLET,
         THROWABLE
     }
-
     [SerializeField] ProjectileType projectileType;
     [SerializeField] float bulletDamage = 20f;
     [SerializeField] float bulletLifetime = 3f;
     [SerializeField] float bulletSpeed = 200f;
-    Rigidbody rb;
     [SerializeField] bool canRicochet;
     [SerializeField] int timesToRicochet;
+    Rigidbody rb;
+    PhotonView photonView;
+
     // sfx
     // vfx
 
@@ -33,14 +35,26 @@ public class Projectile : MonoBehaviour
         {
 
         }
+        photonView = GetComponent<PhotonView>();
+    }
 
-        Destroy(gameObject, bulletLifetime);
+    [PunRPC]
+    void DestroyProjectile()
+    {
+        if(this.photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+            Debug.Log("Destroying" + gameObject);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        bulletLifetime -= Time.deltaTime;
 
+        if (bulletLifetime <= 0f)
+            GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.MasterClient);
     }
     
     public void SetProjectileValues(float bulletDmg, float bulletSpd)
@@ -56,33 +70,41 @@ public class Projectile : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.CompareTag("Block"))
+        //if (col.gameObject.CompareTag("Block"))
+        //{
+        //    if (canRicochet && timesToRicochet > 0)
+        //    {
+        //        Vector3 wallNormal = col.contacts[0].normal;
+        //        Vector3 dir = Vector3.Reflect(rb.velocity, wallNormal).normalized;
+        //        rb.velocity = dir * 2;
+        //        timesToRicochet--;
+
+        //    }
+
+        //    if (timesToRicochet <= 0)
+        //    {
+        //        GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.MasterClient);
+
+        //    }
+
+        //}
+
+        //if (!col.gameObject.CompareTag("Block") && !col.gameObject.CompareTag("Projectile"))
+        //{
+
+        //    ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
+        //    if (colStats != null)
+        //    {
+        //        colStats.TakeDamage(bulletDamage);
+        //    }
+
+        //    GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.MasterClient);
+        //}
+        ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
+        if (colStats != null)
         {
-            if (canRicochet && timesToRicochet > 0)
-            {
-                Vector3 wallNormal = col.contacts[0].normal;
-                Vector3 dir = Vector3.Reflect(rb.velocity, wallNormal).normalized;
-                rb.velocity = dir * 2;
-                timesToRicochet--;
-
-            }
-
-            if (timesToRicochet <= 0)
-            {
-                Destroy(gameObject);
-            }
-            
+            colStats.TakeDamage(bulletDamage);
         }
-
-        if (!col.gameObject.CompareTag("Block") && !col.gameObject.CompareTag("Projectile"))
-        {
-            Destroy(gameObject);
-
-            ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
-            if (colStats != null)
-            {
-                colStats.TakeDamage(bulletDamage);
-            }
-        }
+        GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
     }
 }
