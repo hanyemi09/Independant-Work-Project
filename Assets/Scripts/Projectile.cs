@@ -40,7 +40,7 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(rb.velocity);
+
     }
     
     public void SetProjectileValues(float bulletDmg, float bulletSpd)

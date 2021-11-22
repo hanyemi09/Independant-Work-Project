@@ -6,7 +6,7 @@ using Photon.Pun;
 [ExecuteInEditMode]
 public class PlayerMovement : MonoBehaviour
 {
-    PhotonView view;
+    PhotonView photonView;
 
     FixedJoystick movementJoystick;
     FixedJoystick attackJoystick;
@@ -31,13 +31,13 @@ public class PlayerMovement : MonoBehaviour
         attackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
         playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
         transformSize = transform.localScale;
-        view = GetComponent<PhotonView>();
+        photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (view.IsMine)
+        if (photonView.IsMine)
         {
 
             float x = movementJoystick.Horizontal;

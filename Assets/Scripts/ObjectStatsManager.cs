@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class ObjectStatsManager : MonoBehaviour
 {
     // sfx
     // vfx
     // death anim
+    PhotonView photonView;
 
     float objectHealth = 100f;
     bool isInvincible = false;
+
+    void Start()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
 
     void Update()
     {
@@ -19,12 +26,13 @@ public class ObjectStatsManager : MonoBehaviour
         }
     }
 
+    [PunRPC]
     public void TakeDamage(float damage)
     {
-        if(!isInvincible)
-        {
-            objectHealth -= damage;
-        }
+        if (!photonView.IsMine)
+            return;
+
+        objectHealth -= damage;
     }
 
 

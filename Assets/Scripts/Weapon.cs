@@ -114,7 +114,7 @@ public class Weapon : MonoBehaviour
             Quaternion rot = shootPoint.rotation;
             rot.y += spread;
             //Instantiate(bulletPrefab, shootPoint.position, rot);
-            //PhotonNetwork.Instantiate(bulletPrefab.name, shootPoint.position, rot);
+            PhotonNetwork.Instantiate(bulletPrefab.name, shootPoint.position, rot);
             weaponCurrentAmmo--;
             timeSinceLastShot = 0f;
         }
