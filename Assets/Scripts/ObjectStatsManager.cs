@@ -10,7 +10,7 @@ public class ObjectStatsManager : MonoBehaviour
     // death anim
     PhotonView photonView;
 
-    float objectHealth = 100f;
+    [SerializeField] float objectHealth = 100f;
     bool isInvincible = false;
 
     void Start()
