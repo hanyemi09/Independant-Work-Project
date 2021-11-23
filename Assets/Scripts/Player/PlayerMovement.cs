@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-
+        Physics.IgnoreLayerCollision(3, 3);
         boxCollider = GetComponent<BoxCollider>();
         movementJoystick = GameObject.Find("MovementJoystick").GetComponent<FixedJoystick>();
         attackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
