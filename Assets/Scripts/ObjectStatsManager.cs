@@ -11,8 +11,9 @@ public class ObjectStatsManager : MonoBehaviour
     PhotonView photonView;
     RespawnPlayer respawnPlayer;
     [SerializeField] float objectHealth = 100f;
+    [SerializeField] float objectMaxHealth = 100f;
     bool isInvincible = false;
-
+    bool isRespawning = false;
     void Start()
     {
         photonView = GetComponent<PhotonView>();
@@ -25,7 +26,10 @@ public class ObjectStatsManager : MonoBehaviour
         {
             if (gameObject.layer == 3)
             {
-                photonView.RPC("ObjectStatus", RpcTarget.All, false, this.photonView.ViewID);
+                if(gameObject.activeSelf)
+                {
+                    photonView.RPC("ObjectStatus", RpcTarget.All, false, this.photonView.ViewID);
+                }
             }
             else
             {
@@ -58,11 +62,22 @@ public class ObjectStatsManager : MonoBehaviour
         {
             PhotonView.Find(ID).gameObject.SetActive(tf);
             objectHealth = 100f;
+            
         }
     }
 
     public void RespawnDaPlayer()
     {
         photonView.RPC("ObjectStatus", RpcTarget.All, true, this.photonView.ViewID);
+    }
+
+    [PunRPC]
+    public void HealPlayer(float heal)
+    {
+        if(objectHealth < objectMaxHealth)
+            objectHealth += heal;
+
+        if (objectHealth > objectMaxHealth)
+            objectHealth = objectMaxHealth;
     }
 }   

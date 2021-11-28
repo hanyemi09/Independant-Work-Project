@@ -30,8 +30,11 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] float shootSpread = 15f;
     [SerializeField] float pelletsPerShot;
-    [SerializeField] float weaponDamage;
+    [SerializeField] float weaponDamage = 20f;
+    [SerializeField] float weaponDamageAmount;
+    [SerializeField] float weaponDamageMultiplier = 1f;
     [SerializeField] float weaponFireRate;
+    [SerializeField] float weaponFireRateAmount;
     [SerializeField] float weaponReloadSpeed;
     [SerializeField] float weaponAmmoReload;
     [SerializeField] float weaponMaxAmmoPerClip;
@@ -45,16 +48,20 @@ public class Weapon : MonoBehaviour
 
     void Start()
     {
+        weaponDamageAmount = weaponDamage;
+        weaponFireRateAmount = weaponFireRate;
         shootPoint = GameObject.Find("ShootPoint").transform;
         throwPoint = GameObject.Find("ThrowPoint").transform;
         if(bulletPrefab != null)
         {
-            bulletPrefab.SetProjectileValues(weaponDamage, projectileSpeed);
+            bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
         }
     }
 
     void Update()
     {
+        weaponDamageAmount = weaponDamage * weaponDamageMultiplier;
+
         timeSinceLastShot += Time.deltaTime;
         timeSinceLastReload += Time.deltaTime;
 
@@ -72,7 +79,7 @@ public class Weapon : MonoBehaviour
 
     public void HandleShoot(Vector3 dir)
     {
-        if (timeSinceLastShot > weaponFireRate)
+        if (timeSinceLastShot > weaponFireRateAmount)
         {
             switch (weaponShootType)
             {
@@ -100,7 +107,7 @@ public class Weapon : MonoBehaviour
         for(int i = 0; i < hitColliders.Length;  i++)
         {
             Debug.Log("Hit");
-            hitColliders[i].GetComponent<ObjectStatsManager>().TakeDamage(weaponDamage);
+            hitColliders[i].GetComponent<ObjectStatsManager>().TakeDamage(weaponDamageAmount);
         }
         timeSinceLastShot = 0f;
     }
@@ -167,13 +174,34 @@ public class Weapon : MonoBehaviour
         }
     }   
 
-    void HandleReload()
+    [PunRPC]
+    public void DamageBuff(float dmgMultiplier, float duration)
     {
-
+        weaponDamageMultiplier = dmgMultiplier;
+        weaponDamageAmount = weaponDamage * weaponDamageMultiplier;
+        bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
+        StartCoroutine(DamageBuffDuration(duration));
     }
 
-    void TryReload()
+    IEnumerator DamageBuffDuration(float duration)
     {
-
+        yield return new WaitForSeconds(duration);
+        weaponDamageMultiplier = 1f;
+        weaponDamageAmount = weaponDamage * weaponDamageMultiplier;
+        bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
     }
+
+    public void AtkSpdBuff(float atkSpd, float duration)
+    {
+        weaponFireRateAmount = weaponFireRate / atkSpd;
+        StartCoroutine(AtkSpdBuffDuration(duration));
+    }
+
+    IEnumerator AtkSpdBuffDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        weaponFireRateAmount = weaponFireRate;
+    }
+
+
 }

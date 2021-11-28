@@ -20,11 +20,14 @@ public class PlayerMovement : MonoBehaviour
     float rotationSpeed = 10f;
     float borderDirControl = 0.15f;
     float moveSpeed = 5f;
+    float moveSpeedAmt = 5f;
+    float moveSpeedMultiplier = 1f;
     Vector3 transformSize;
     // Start is called before the first frame update
 
     void Start()
     {
+        moveSpeedAmt = moveSpeed;
         Physics.IgnoreLayerCollision(3, 3);
         boxCollider = GetComponent<BoxCollider>();
         movementJoystick = GameObject.Find("MovementJoystick").GetComponent<FixedJoystick>();
@@ -77,8 +80,10 @@ public class PlayerMovement : MonoBehaviour
                 transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
             }
 
+            moveSpeedAmt = moveSpeed * moveSpeedMultiplier;
+
             // Moving
-            transform.Translate(moveDelta * Time.deltaTime * moveSpeed, Space.World);
+            transform.Translate(moveDelta * Time.deltaTime * moveSpeedAmt, Space.World);
 
             // Swap sprite directions
             if (moveDelta.x > 0)
@@ -92,5 +97,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void MoveSpeedBuff(float multiplier, float duration)
+    {
+        moveSpeedMultiplier = multiplier;
+        StartCoroutine(MoveSpeedBuffDuration(duration));
+    }
 
+    IEnumerator MoveSpeedBuffDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        moveSpeedMultiplier = moveSpeed;
+    }
 }

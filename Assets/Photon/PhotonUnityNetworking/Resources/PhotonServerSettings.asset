@@ -45,6 +45,10 @@ MonoBehaviour:
   - DestroyObject
   - ObjectStatus
   - CallRespawnPlayer
+  - HealPlayer
+  - DestroyPowerup
+  - DamageBuff
+  - SpawnPowerup
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

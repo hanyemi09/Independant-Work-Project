@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -36,6 +36,7 @@ public class Projectile : MonoBehaviour
 
         }
         photonView = GetComponent<PhotonView>();
+        Debug.Log(bulletDamage);
     }
 
     [PunRPC]
@@ -70,51 +71,13 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
-        if (colStats != null)
+        PhotonView pv = col.gameObject.GetComponent<PhotonView>();
+        if (pv != null)
         {
-            colStats.TakeDamage(bulletDamage);
-            GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
+             pv.RPC("TakeDamage", RpcTarget.AllBuffered, bulletDamage);
         }
+        GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
+
     }
 
-    //void OnCollisionEnter(Collision col)
-    //{
-    //    //if (col.gameObject.CompareTag("Block"))
-    //    //{
-    //    //    if (canRicochet && timesToRicochet > 0)
-    //    //    {
-    //    //        Vector3 wallNormal = col.contacts[0].normal;
-    //    //        Vector3 dir = Vector3.Reflect(rb.velocity, wallNormal).normalized;
-    //    //        rb.velocity = dir * 2;
-    //    //        timesToRicochet--;
-
-    //    //    }
-
-    //    //    if (timesToRicochet <= 0)
-    //    //    {
-    //    //        GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.MasterClient);
-
-    //    //    }
-
-    //    //}
-
-    //    //if (!col.gameObject.CompareTag("Block") && !col.gameObject.CompareTag("Projectile"))
-    //    //{
-
-    //    //    ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
-    //    //    if (colStats != null)
-    //    //    {
-    //    //        colStats.TakeDamage(bulletDamage);
-    //    //    }
-
-    //    //    GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.MasterClient);
-    //    //}
-    //    ObjectStatsManager colStats = col.gameObject.GetComponent<ObjectStatsManager>();
-    //    if (colStats != null)
-    //    {
-    //        colStats.TakeDamage(bulletDamage);
-    //    }
-    //    GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
-    //}
 }

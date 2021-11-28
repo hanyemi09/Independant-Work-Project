@@ -7,7 +7,7 @@ public class RespawnPlayer : MonoBehaviour
 {
 
     [SerializeField] float respawnTimer = 2f;
-
+    bool isRespawning = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +21,11 @@ public class RespawnPlayer : MonoBehaviour
         {
             if (gameObject.transform.GetChild(i).gameObject.active == false)
             {
-                CallRespawnPlayer(gameObject.transform.GetChild(i).GetComponent<PhotonView>().ViewID);
+                if(!isRespawning)
+                {
+                    CallRespawnPlayer(gameObject.transform.GetChild(i).GetComponent<PhotonView>().ViewID);
+                    isRespawning = true;
+                }
             }
         }
 
@@ -30,7 +34,6 @@ public class RespawnPlayer : MonoBehaviour
     void CallRespawnPlayer(int ID)
     {
         StartCoroutine(RespawnDaPlayer(respawnTimer, ID));
-
     }
 
 
@@ -46,6 +49,6 @@ public class RespawnPlayer : MonoBehaviour
     {
         ObjectStatsManager osm = gameObject.transform.GetChild(0).gameObject.GetComponent<ObjectStatsManager>();
         osm.RespawnDaPlayer();
-       
+        isRespawning = false;
     }
 }
