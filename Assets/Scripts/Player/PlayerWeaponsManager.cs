@@ -7,7 +7,7 @@ public class PlayerWeaponsManager : MonoBehaviour
     Weapon[] weapons = new Weapon[1];
     Weapon currentActiveWeapon;
     [SerializeField] GameObject weaponHolder;
-    
+
     void Start()
     {
 

@@ -20,6 +20,7 @@ public class Weapon : MonoBehaviour
     // ShootSFX
     [SerializeField] Projectile bulletPrefab;
     [SerializeField] Rigidbody grenadePrefab;
+    [SerializeField] Animator anim;
     Transform shootPoint;
     Transform throwPoint;
 
@@ -56,6 +57,8 @@ public class Weapon : MonoBehaviour
         {
             bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
         }
+        anim = GetComponent<Animator>();
+
     }
 
     void Update()
@@ -79,6 +82,7 @@ public class Weapon : MonoBehaviour
 
     public void HandleShoot(Vector3 dir)
     {
+
         if (timeSinceLastShot > weaponFireRateAmount)
         {
             switch (weaponShootType)
@@ -96,20 +100,41 @@ public class Weapon : MonoBehaviour
                     TryThrowGrenade(dir);
                     break;
                 case WeaponShootType.Melee:
-                    TryMelee(dir);
+                    TryMelee();
+                    //pv.RPC("TryMelee", RpcTarget.AllBuffered);
                     break;
             }
         }   
     }
-    void TryMelee(Vector3 dir)
+
+    void TryMelee()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(shootPoint.position, meleeAttackRange, whatIsEnemies);
-        for(int i = 0; i < hitColliders.Length;  i++)
+        if(anim != null)
         {
-            Debug.Log("Hit");
-            hitColliders[i].GetComponent<ObjectStatsManager>().TakeDamage(weaponDamageAmount);
+            timeSinceLastShot = 0f;
+            GetComponent<Collider>().enabled = true;
+            anim.SetTrigger("attack");
+            StartCoroutine(playAndWaitForAnim());
         }
-        timeSinceLastShot = 0f;
+    }
+
+    IEnumerator playAndWaitForAnim()
+    {
+        
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+        GetComponent<Collider>().enabled = false;
+        //Done playing. Do something below!
+        Debug.Log("Done Playing");
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        PhotonView pv = col.gameObject.GetComponent<PhotonView>();
+        if (pv != null)
+        {
+            pv.RPC("TakeDamage", RpcTarget.AllBuffered, weaponDamage);
+        }
+        
     }
 
     void TryShoot(Vector3 shootDir, float pellets)
