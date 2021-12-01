@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-
+using TMPro;
 public class Projectile : MonoBehaviour
 {
 
@@ -17,6 +17,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] float bulletSpeed = 200f;
     [SerializeField] bool canRicochet;
     [SerializeField] int timesToRicochet;
+    [SerializeField] Transform damagePopup;
     Rigidbody rb;
     PhotonView photonView;
 
@@ -74,9 +75,13 @@ public class Projectile : MonoBehaviour
         PhotonView pv = col.gameObject.GetComponent<PhotonView>();
         if (pv != null)
         {
-             pv.RPC("TakeDamage", RpcTarget.AllBuffered, bulletDamage);
+            pv.RPC("TakeDamage", RpcTarget.AllBuffered, bulletDamage);
+            GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
+            Transform go1 = Instantiate(damagePopup, gameObject.transform.position, damagePopup.rotation);
+            TextMeshPro tmp1 = go1.GetComponent<TextMeshPro>();
+            tmp1.text = bulletDamage.ToString();
         }
-        GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
+
 
     }
 
