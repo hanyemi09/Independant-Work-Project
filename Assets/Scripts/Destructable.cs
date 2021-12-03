@@ -7,6 +7,7 @@ public class Destructable : MonoBehaviour
 {
 
     PhotonView photonView;
+    [SerializeField] float chanceToSpawn = 50f;
     [SerializeField] Powerups[] powerup = new Powerups[4];
     // Start is called before the first frame update
     void Start()
@@ -43,9 +44,17 @@ public class Destructable : MonoBehaviour
     [PunRPC]
     void SpawnPowerup()
     {
-        if(Random.Range(0,100) <= 25)
+        Debug.Log("Spawning powerup! ");
+        int random = Random.Range(0, 100);
+        Debug.Log(random);
+        if (random <= chanceToSpawn)
         {
+            Debug.Log("Spawned Powerup!");
             PhotonNetwork.Instantiate(powerup[Random.Range(0, 3)].name, gameObject.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log("Spawning powerup failed!");
         }
     }
 }

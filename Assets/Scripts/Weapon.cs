@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-
+using TMPro;
 public enum WeaponShootType
 {
     Burst,
@@ -21,6 +21,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] Projectile bulletPrefab;
     [SerializeField] Rigidbody grenadePrefab;
     [SerializeField] Animator anim;
+    [SerializeField] Transform damagePopup;
     Transform shootPoint;
     Transform throwPoint;
 
@@ -51,6 +52,7 @@ public class Weapon : MonoBehaviour
     {
         weaponDamageAmount = weaponDamage;
         weaponFireRateAmount = weaponFireRate;
+        timeSinceLastShot = weaponFireRate;
         shootPoint = GameObject.Find("ShootPoint").transform;
         throwPoint = GameObject.Find("ThrowPoint").transform;
         if(bulletPrefab != null)
@@ -58,6 +60,7 @@ public class Weapon : MonoBehaviour
             bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
         }
         anim = GetComponent<Animator>();
+        GetComponent<Collider>().enabled = false;
 
     }
 
@@ -114,6 +117,7 @@ public class Weapon : MonoBehaviour
             timeSinceLastShot = 0f;
             GetComponent<Collider>().enabled = true;
             anim.SetTrigger("attack");
+
             StartCoroutine(playAndWaitForAnim());
         }
     }
@@ -132,9 +136,19 @@ public class Weapon : MonoBehaviour
         PhotonView pv = col.gameObject.GetComponent<PhotonView>();
         if (pv != null)
         {
+            Debug.Log("Hit Enemy");
             pv.RPC("TakeDamage", RpcTarget.AllBuffered, weaponDamage);
+            Transform go = Instantiate(damagePopup, gameObject.transform.position, damagePopup.rotation);
+            TextMeshPro tmp = go.GetComponent<TextMeshPro>();
+            tmp.text = weaponDamage.ToString();
         }
-        
+        //else if(pv == null)
+        //{
+        //    Transform go1 = Instantiate(damagePopup, gameObject.transform.position, damagePopup.rotation);
+        //    TextMeshPro tmp1 = go1.GetComponent<TextMeshPro>();
+        //    tmp1.text = weaponDamage.ToString();
+        //    col.
+        //}
     }
 
     void TryShoot(Vector3 shootDir, float pellets)

@@ -106,6 +106,6 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator MoveSpeedBuffDuration(float duration)
     {
         yield return new WaitForSeconds(duration);
-        moveSpeedMultiplier = moveSpeed;
+        moveSpeedMultiplier = 1f;
     }
 }
