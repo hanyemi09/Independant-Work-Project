@@ -8,7 +8,6 @@ public class Ultimate : MonoBehaviour
     Transform shootPoint;
 
     float distanceMultiplier = 10f;
-    float time = 10f;
 
     void Start()
     {
