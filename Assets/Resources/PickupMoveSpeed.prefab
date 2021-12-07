@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 325481369035120821}
   - component: {fileID: 6628757058306889058}
   - component: {fileID: 2639120749471615871}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PickupMoveSpeed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,3 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupType: 3
   healAmount: 50
+  dmgMultiplier: 0
+  atkSpdMultiplier: 0
+  moveSpdMultiplier: 0
+  duration: 0

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5693695550380161407}
   - component: {fileID: 7704546406429547307}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerRifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnTimer: 2
+  respawnTimerUI: 0
+  tmp: {fileID: 0}
 --- !u!1001 &184172013167466600
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -135,6 +137,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4130042693444979633}
     m_Modifications:
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: damagePopup
+      value: 
+      objectReference: {fileID: 6219535927369673050, guid: 57f8740d9b3979a43a101d9eba7cb1dd, type: 3}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 21604981361658176, guid: c41749a97a1e05f49919526351ffd7b6, type: 3}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: weaponFireRate
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: weaponAmmoReload
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: weaponReloadSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 688364240145824430, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -182,6 +204,10 @@ PrefabInstance:
     - target: {fileID: 4414685776688409274, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
       propertyPath: m_Name
       value: WeaponRifle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414685776688409274, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
