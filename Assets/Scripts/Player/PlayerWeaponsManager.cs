@@ -29,6 +29,11 @@ public class PlayerWeaponsManager : MonoBehaviour
             }
         }
     }
+    
+    void Update()
+    {
+
+    }
 
     public void HandleShoot(Vector3 dir)
     {

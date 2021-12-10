@@ -10,13 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5693695550380161407}
   - component: {fileID: 7704546406429547307}
-<<<<<<< HEAD
   - component: {fileID: 8844210242678289988}
   - component: {fileID: -7772117905600851917}
   m_Layer: 0
-=======
-  m_Layer: 3
->>>>>>> 77dd135394d1bedcadf57cb40084bb953b8b224f
   m_Name: PlayerMelee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnTimer: 2
-<<<<<<< HEAD
 --- !u!54 &8844210242678289988
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -81,10 +76,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
-=======
-  respawnTimerUI: 0
-  tmp: {fileID: 0}
->>>>>>> 77dd135394d1bedcadf57cb40084bb953b8b224f
 --- !u!1001 &184172013167466600
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -231,41 +222,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: WeaponMelee
       objectReference: {fileID: 0}
-    - target: {fileID: 5177945491783798319, guid: e7e1e899026ad78449a608a72302950c, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
       propertyPath: damagePopup
       value: 
       objectReference: {fileID: 6219535927369673050, guid: 57f8740d9b3979a43a101d9eba7cb1dd, type: 3}
     - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
-      propertyPath: bulletPrefab
-      value: 
-      objectReference: {fileID: 21604981361658176, guid: c41749a97a1e05f49919526351ffd7b6, type: 3}
-    - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
       propertyPath: weaponFireRate
       value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
-      propertyPath: weaponShootType
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
-      propertyPath: weaponAmmoReload
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
-      propertyPath: weaponCurrentAmmo
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
-      propertyPath: weaponReloadSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970871446749035870, guid: e7e1e899026ad78449a608a72302950c, type: 3}
-      propertyPath: weaponMaxAmmoPerClip
-      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7e1e899026ad78449a608a72302950c, type: 3}
