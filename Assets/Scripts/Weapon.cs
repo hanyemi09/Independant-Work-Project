@@ -24,6 +24,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] Transform damagePopup;
     Transform shootPoint;
     Transform throwPoint;
+    [SerializeField] TextMeshProUGUI ammoUI;
 
     [SerializeField] WeaponShootType weaponShootType;
 
@@ -60,12 +61,26 @@ public class Weapon : MonoBehaviour
             bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
         }
         anim = GetComponent<Animator>();
-        GetComponent<Collider>().enabled = false;
+        if(GetComponent<Collider>())
+            GetComponent<Collider>().enabled = false;
+        ammoUI = GameObject.Find("AmmoUI").GetComponent<TextMeshProUGUI>();
+
+        if (weaponShootType != WeaponShootType.Melee)
+        {
+            ammoUI.enabled = true;
+        }
+        else
+        {
+            ammoUI.enabled = false;
+
+        }
 
     }
 
     void Update()
     {
+        if (weaponShootType != WeaponShootType.Melee && ammoUI != null)
+            ammoUI.text = "Ammo: " + weaponCurrentAmmo + "/" + weaponMaxAmmoPerClip;
         weaponDamageAmount = weaponDamage * weaponDamageMultiplier;
 
         timeSinceLastShot += Time.deltaTime;
@@ -158,7 +173,7 @@ public class Weapon : MonoBehaviour
         {
             float spread = Random.Range(-shootSpread, shootSpread);
             Quaternion rot = shootPoint.rotation;
-            rot.y += spread;
+            //rot.y += spread;
             //Instantiate(bulletPrefab, shootPoint.position, rot);
             PhotonNetwork.Instantiate(bulletPrefab.name, shootPoint.position, rot);
             weaponCurrentAmmo--;

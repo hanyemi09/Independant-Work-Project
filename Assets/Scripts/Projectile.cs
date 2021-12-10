@@ -73,16 +73,14 @@ public class Projectile : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         PhotonView pv = col.gameObject.GetComponent<PhotonView>();
-        if (pv != null)
+        if (pv != null && col.gameObject.layer != 11)
         {
             pv.RPC("TakeDamage", RpcTarget.AllBuffered, bulletDamage);
             GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
-            Transform go1 = Instantiate(damagePopup, gameObject.transform.position, damagePopup.rotation);
-            TextMeshPro tmp1 = go1.GetComponent<TextMeshPro>();
-            tmp1.text = bulletDamage.ToString();
+            Transform go = Instantiate(damagePopup, gameObject.transform.position, damagePopup.rotation);
+            TextMeshPro tmp = go.GetComponent<TextMeshPro>();
+            tmp.text = bulletDamage.ToString();
         }
-
-
     }
 
 }

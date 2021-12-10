@@ -18,7 +18,11 @@ TagManager:
   - Wall
   - Projectile
   - Enemy
+<<<<<<< HEAD
   - Powerups
+=======
+  - Powerup
+>>>>>>> 77dd135394d1bedcadf57cb40084bb953b8b224f
   - 
   - 
   - 

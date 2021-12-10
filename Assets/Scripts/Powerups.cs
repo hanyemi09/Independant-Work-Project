@@ -38,7 +38,9 @@ public class Powerups : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         PhotonView pv = col.gameObject.GetComponent<PhotonView>();
-        
+        if (col.gameObject.layer != 3)
+            return;
+
         if(immuneTime < 0)
         {
             switch (powerupType)

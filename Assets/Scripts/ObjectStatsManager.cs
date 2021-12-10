@@ -13,11 +13,14 @@ public class ObjectStatsManager : MonoBehaviour
     RespawnPlayer respawnPlayer;
     [SerializeField] float objectHealth = 100f;
     [SerializeField] float objectMaxHealth = 100f;
+<<<<<<< HEAD
 
     public Slider slider;
 
     bool isInvincible = false;
     bool isRespawning = false;
+=======
+>>>>>>> 77dd135394d1bedcadf57cb40084bb953b8b224f
     void Start()
     {
         photonView = GetComponent<PhotonView>();
