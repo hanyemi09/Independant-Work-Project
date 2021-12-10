@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class ObjectStatsManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class ObjectStatsManager : MonoBehaviour
     RespawnPlayer respawnPlayer;
     [SerializeField] float objectHealth = 100f;
     [SerializeField] float objectMaxHealth = 100f;
+
+    public Slider slider;
+
     bool isInvincible = false;
     bool isRespawning = false;
     void Start()
@@ -22,6 +26,9 @@ public class ObjectStatsManager : MonoBehaviour
 
     void Update()
     {
+        if(slider)
+            slider.value = objectHealth;
+
         if (objectHealth <= 0)
         {
             if (gameObject.layer == 3)
