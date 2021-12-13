@@ -314,6 +314,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4130042693444979633}
     m_Modifications:
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: damagePopup
+      value: 
+      objectReference: {fileID: 6219535927369673050, guid: 57f8740d9b3979a43a101d9eba7cb1dd, type: 3}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 21604981361658176, guid: c41749a97a1e05f49919526351ffd7b6, type: 3}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: pelletsPerShot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: weaponAmmoReload
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 309088447632871111, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
+      propertyPath: weaponReloadSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 688364240145824430, guid: 4c4c564522651fb4591c0e369f61c8c3, type: 3}
       propertyPath: m_RootOrder
       value: 0

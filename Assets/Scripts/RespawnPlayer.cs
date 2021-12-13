@@ -19,7 +19,7 @@ public class RespawnPlayer : MonoBehaviour
     {
         for(int i = 0; i < gameObject.transform.childCount; i++)
         {
-            if (gameObject.transform.GetChild(i).gameObject.active == false)
+            if (gameObject.transform.GetChild(i).gameObject.activeSelf == false)
             {
                 if(!isRespawning)
                 {

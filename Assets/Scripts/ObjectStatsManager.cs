@@ -16,8 +16,6 @@ public class ObjectStatsManager : MonoBehaviour
 
     public Slider slider;
 
-    bool isInvincible = false;
-    bool isRespawning = false;
     void Start()
     {
         photonView = GetComponent<PhotonView>();
