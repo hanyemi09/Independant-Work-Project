@@ -43,15 +43,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5d68654acd084458a0ebd839dd0ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 0}
+  bulletPrefab: {fileID: 21604981361658176, guid: c41749a97a1e05f49919526351ffd7b6, type: 3}
   grenadePrefab: {fileID: 0}
+  anim: {fileID: 0}
+  damagePopup: {fileID: 6219535927369673050, guid: 57f8740d9b3979a43a101d9eba7cb1dd, type: 3}
   weaponShootType: 1
   projectileSpeed: 15
   projectileSpread: 0
-  shootSpread: 15
-  pelletsPerShot: 0
-  weaponDamage: 20
+  shootSpread: 0
+  pelletsPerShot: 1
+  weaponDamage: 15
+  weaponDamageAmount: 0
+  weaponDamageMultiplier: 1
   weaponFireRate: 1
-  weaponReloadSpeed: 0
+  weaponFireRateAmount: 0
+  weaponReloadSpeed: 0.5
+  weaponAmmoReload: 3
   weaponMaxAmmoPerClip: 30
   weaponCurrentAmmo: 30
+  meleeAttackRange: 0
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 0

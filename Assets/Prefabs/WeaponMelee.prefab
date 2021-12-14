@@ -131,6 +131,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   grenadePrefab: {fileID: 0}
   anim: {fileID: 0}
+  damagePopup: {fileID: 0}
   weaponShootType: 6
   projectileSpeed: 0
   projectileSpread: 0
@@ -139,13 +140,13 @@ MonoBehaviour:
   weaponDamage: 20
   weaponDamageAmount: 0
   weaponDamageMultiplier: 1
-  weaponFireRate: 0
+  weaponFireRate: 0.5
   weaponFireRateAmount: 0
-  weaponReloadSpeed: 0
+  weaponReloadSpeed: 0.5
   weaponAmmoReload: 0
   weaponMaxAmmoPerClip: 0
   weaponCurrentAmmo: 0
-  meleeAttackRange: 0
+  meleeAttackRange: 2
   whatIsEnemies:
     serializedVersion: 2
     m_Bits: 0
