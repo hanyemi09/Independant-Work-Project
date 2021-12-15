@@ -14,11 +14,9 @@ public class Powerups : MonoBehaviour
         TOTAL,
     }
 
-    [SerializeField]POWERUPTYPE powerupType;
+    [SerializeField] POWERUPTYPE powerupType;
     [SerializeField] float healAmount;
-    [SerializeField] float dmgMultiplier;
-    [SerializeField] float atkSpdMultiplier;
-    [SerializeField] float moveSpdMultiplier;
+    [SerializeField] float Multiplier;
     [SerializeField] float duration;
     float immuneTime = 1f;
     PhotonView photonView;
@@ -51,19 +49,19 @@ public class Powerups : MonoBehaviour
                 case POWERUPTYPE.DAMAGEBUFF:
                     Weapon weap = pv.transform.Find("WeaponHolder").GetChild(0).gameObject.GetComponent<Weapon>();
                     if (weap != null)
-                        weap.DamageBuff(dmgMultiplier, duration);
+                        weap.DamageBuff(Multiplier, duration);
                     Debug.Log("Damage Buff");
                     break;
                 case POWERUPTYPE.ATKSPEEDBUFF:
                     Weapon wea = pv.transform.Find("WeaponHolder").GetChild(0).gameObject.GetComponent<Weapon>();
                     if (wea != null)
-                        wea.AtkSpdBuff(atkSpdMultiplier, duration);
+                        wea.AtkSpdBuff(Multiplier, duration);
                     Debug.Log("Attack Speed Buff");
                     break;
                 case POWERUPTYPE.MOVESPEEDBUFF:
                     PlayerMovement pm = pv.gameObject.GetComponent<PlayerMovement>();
                     if (pm != null)
-                        pm.MoveSpeedBuff(moveSpdMultiplier, duration);
+                        pm.MoveSpeedBuff(Multiplier, duration);
                     Debug.Log("Move Speed");
                     break;
 

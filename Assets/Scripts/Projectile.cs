@@ -81,7 +81,10 @@ public class Projectile : MonoBehaviour
             TextMeshPro tmp1 = go1.GetComponent<TextMeshPro>();
             tmp1.text = bulletDamage.ToString();
         }
-
+        else
+        {
+            GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.AllBuffered);
+        }
 
     }
 

@@ -30,6 +30,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectHealth: 100
   objectMaxHealth: 100
+  slider: {fileID: 0}
 --- !u!1001 &8488368539987652191
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41,6 +42,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5625605871745810397, guid: 2aa1766a4de79a74fbe1da8850cc3f6d, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 5625605873066341676, guid: 2aa1766a4de79a74fbe1da8850cc3f6d, type: 3}
       propertyPath: m_IsTrigger
       value: 0

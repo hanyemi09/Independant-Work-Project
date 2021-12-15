@@ -30,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7536495564389106728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.11, y: 0.4, z: 13.06527}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -146,8 +146,8 @@ MonoBehaviour:
   walkPointRange: 5
   timeBetweenAttacks: 1
   projectile: {fileID: 7716675640826804233, guid: c41749a97a1e05f49919526351ffd7b6, type: 3}
-  sightRange: 5
-  attackRange: 2
+  sightRange: 8
+  attackRange: 4
   playerInSightRange: 0
   playerInAttackRange: 0
 --- !u!114 &7536495564389106722

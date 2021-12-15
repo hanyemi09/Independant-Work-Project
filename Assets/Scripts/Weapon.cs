@@ -23,7 +23,6 @@ public class Weapon : MonoBehaviour
     [SerializeField] Animator anim;
     [SerializeField] Transform damagePopup;
     Transform shootPoint;
-    Transform throwPoint;
 
     [SerializeField] WeaponShootType weaponShootType;
 
@@ -54,7 +53,6 @@ public class Weapon : MonoBehaviour
         weaponFireRateAmount = weaponFireRate;
         timeSinceLastShot = weaponFireRate;
         shootPoint = GameObject.Find("ShootPoint").transform;
-        throwPoint = GameObject.Find("ThrowPoint").transform;
         if(bulletPrefab != null)
         {
             bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
@@ -98,9 +96,6 @@ public class Weapon : MonoBehaviour
                     break;
                 case WeaponShootType.Burst:
                     StartCoroutine(TryBurstShoot(dir));
-                    break;
-                case WeaponShootType.Throw:
-                    TryThrowGrenade(dir);
                     break;
                 case WeaponShootType.Melee:
                     TryMelee();
@@ -184,34 +179,34 @@ public class Weapon : MonoBehaviour
         burstComplete = true;
     }
 
-    void TryThrowGrenade(Vector3 shootDir)
-    {
-        if (shootDir.magnitude > 0.155f)
-        {
-            Vector3 throwAtPosition = shootDir * distanceMultiplier;
-            Vector3 distance = throwAtPosition - shootDir;
-            Vector3 distanceXZ = distance;
-            float hypo = distance.x * distance.x + distance.z * distance.z;
-            float time = hypo / hypo / 2;
+    //void TryThrowGrenade(Vector3 shootDir)
+    //{
+    //    if (shootDir.magnitude > 0.155f)
+    //    {
+    //        Vector3 throwAtPosition = shootDir * distanceMultiplier;
+    //        Vector3 distance = throwAtPosition - shootDir;
+    //        Vector3 distanceXZ = distance;
+    //        float hypo = distance.x * distance.x + distance.z * distance.z;
+    //        float time = hypo / hypo / 2;
 
-            distanceXZ.y = 0f;
+    //        distanceXZ.y = 0f;
 
-            float Sy = distance.y;
-            float Sxz = distanceXZ.magnitude;
+    //        float Sy = distance.y;
+    //        float Sxz = distanceXZ.magnitude;
 
-            float Vxz = Sxz / time;
-            float Vy = Sy / time + 0.5f * Mathf.Abs(Physics.gravity.y);
+    //        float Vxz = Sxz / time;
+    //        float Vy = Sy / time + 0.5f * Mathf.Abs(Physics.gravity.y);
 
-            Vector3 result = distanceXZ.normalized;
-            result *= Vxz;
-            result.y = Vy;
+    //        Vector3 result = distanceXZ.normalized;
+    //        result *= Vxz;
+    //        result.y = Vy;
 
-            Rigidbody rb = Instantiate(grenadePrefab, throwPoint.position, Quaternion.identity);
-            weaponCurrentAmmo--;
-            rb.velocity = result;
-            timeSinceLastShot = 0f;
-        }
-    }   
+    //        Rigidbody rb = Instantiate(grenadePrefab, throwPoint.position, Quaternion.identity);
+    //        weaponCurrentAmmo--;
+    //        rb.velocity = result;
+    //        timeSinceLastShot = 0f;
+    //    }
+    //}   
 
     [PunRPC]
     public void DamageBuff(float dmgMultiplier, float duration)

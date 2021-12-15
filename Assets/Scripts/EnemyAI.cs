@@ -8,7 +8,7 @@ public class EnemyAI : MonoBehaviour
     public NavMeshAgent agent;
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
-
+    GameObject[] currentPlayers;
     public float health = 100f;
     // Patrolling
     public Vector3 walkPoint;
@@ -27,9 +27,16 @@ public class EnemyAI : MonoBehaviour
     PhotonView photonView;
     void Awake()
     {
+
+       
         photonView = GetComponent<PhotonView>();
-        player = GameObject.FindWithTag("Player").transform;
+        //player = GameObject.FindWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    void Start()
+    {
+        currentPlayers = FindGameObjectsWithLayer(whatIsPlayer);
     }
 
     void Update()
@@ -43,6 +50,51 @@ public class EnemyAI : MonoBehaviour
             if (playerInSightRange && !playerInAttackRange) ChasePlayer();
             if (!playerInSightRange && playerInAttackRange) AttackPlayer();
         }
+    }
+
+    GameObject[] FindGameObjectsWithLayer(int layer)
+    {
+        GameObject[] goArray = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+        List<GameObject> goList = new List<GameObject>();
+        for (int i = 0; i < goArray.Length; i++)
+        {
+            if (goArray[i].layer == layer && goArray[i].gameObject.GetComponent<ObjectStatsManager>())
+            {
+
+                    goList.Add(goArray[i]);
+                    Debug.Log(goList[i].gameObject.name);
+            }
+        }
+        if (goList.Count == 0) 
+        { 
+            return null;
+        }
+
+        return goList.ToArray();
+
+    }
+
+    GameObject FindClosestPlayer(GameObject[] goArray)
+    {
+        GameObject go = null;
+        for (int i = 0; i < goArray.Length; i++)
+        {
+            if(go == null)
+            {
+                go = goArray[i];
+
+            }
+            else
+            {
+                if (Vector3.Distance(gameObject.transform.position, goArray[i].transform.position) > Vector3.Distance(gameObject.transform.position , go.transform.position))
+                    go = goArray[i];
+            }
+        }
+
+        if (go != null)
+            return go;
+        else
+            return null;
     }
 
     void Patrolling()
@@ -69,9 +121,10 @@ public class EnemyAI : MonoBehaviour
         if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
             walkPointSet = true;
     }
+
     void ChasePlayer()
     {
-        agent.SetDestination(player.position);
+        agent.SetDestination(FindClosestPlayer(currentPlayers).transform.position);
     }
 
     void AttackPlayer()
@@ -79,7 +132,8 @@ public class EnemyAI : MonoBehaviour
         // Make sure enemy doesnt move
         agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+        Debug.Log(FindClosestPlayer(currentPlayers).transform);
+        transform.LookAt(FindClosestPlayer(currentPlayers).transform);
         if(!alreadyAttacked)
         {
             // Attack code here
