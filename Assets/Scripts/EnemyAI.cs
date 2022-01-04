@@ -23,32 +23,69 @@ public class EnemyAI : MonoBehaviour
     //States
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
-
+    PlayerList pl;
     PhotonView photonView;
     void Awake()
     {
-
-       
         photonView = GetComponent<PhotonView>();
         //player = GameObject.FindWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        pl = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+
     }
 
     void Start()
     {
-        currentPlayers = FindGameObjectsWithLayer(whatIsPlayer);
+
     }
 
     void Update()
     {
-        if(photonView.IsMine)
+
+        if (photonView.IsMine)
         {
+            currentPlayers = pl.GetPlayers();
             playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
             playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-            if (!playerInSightRange && !playerInAttackRange) Patrolling();
-            if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-            if (!playerInSightRange && playerInAttackRange) AttackPlayer();
+            if (!playerInSightRange && !playerInAttackRange)
+            {
+                if (!walkPointSet) SearchWalkPoint();
+
+                if (walkPointSet)
+                    agent.SetDestination(walkPoint);
+
+                Vector3 distanceToWalkPoint = transform.position - walkPoint;
+
+                //Walkpoint reached
+                if (distanceToWalkPoint.magnitude < 1f)
+                    walkPointSet = false;
+            }
+
+            if (playerInSightRange && !playerInAttackRange)
+            {
+                agent.SetDestination(FindClosestPlayer(currentPlayers).transform.position);
+            }
+
+            if (!playerInSightRange && playerInAttackRange)
+            {
+                // Make sure enemy doesnt move
+                agent.SetDestination(transform.position);
+
+                Debug.Log(FindClosestPlayer(currentPlayers).transform);
+                transform.LookAt(FindClosestPlayer(currentPlayers).transform);
+                if (!alreadyAttacked)
+                {
+                    // Attack code here
+                    Rigidbody rb = PhotonNetwork.Instantiate(projectile.name, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+                    rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+                    rb.AddForce(transform.up * 8f, ForceMode.Impulse);
+
+                    alreadyAttacked = true;
+                    Invoke(nameof(ResetAttack), timeBetweenAttacks);
+                }
+
+            }
         }
     }
 
@@ -97,18 +134,19 @@ public class EnemyAI : MonoBehaviour
             return null;
     }
 
+    [PunRPC]
     void Patrolling()
     {
-        if (!walkPointSet) SearchWalkPoint();
+                        if (!walkPointSet) SearchWalkPoint();
 
-        if (walkPointSet)
-            agent.SetDestination(walkPoint);
+                if (walkPointSet)
+                    agent.SetDestination(walkPoint);
 
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
+                Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        //Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
+                //Walkpoint reached
+                if (distanceToWalkPoint.magnitude < 1f)
+                    walkPointSet = false;
     }
 
     void SearchWalkPoint()
@@ -122,11 +160,13 @@ public class EnemyAI : MonoBehaviour
             walkPointSet = true;
     }
 
+    [PunRPC]
     void ChasePlayer()
     {
         agent.SetDestination(FindClosestPlayer(currentPlayers).transform.position);
     }
 
+    [PunRPC]
     void AttackPlayer()
     {
         // Make sure enemy doesnt move

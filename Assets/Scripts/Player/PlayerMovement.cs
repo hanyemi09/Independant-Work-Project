@@ -23,8 +23,13 @@ public class PlayerMovement : MonoBehaviour
     float moveSpeedAmt = 5f;
     float moveSpeedMultiplier = 1f;
     Vector3 transformSize;
+    public PlayerList pl;
     // Start is called before the first frame update
 
+    void Awake()
+    {
+
+    }
     void Start()
     {
         moveSpeedAmt = moveSpeed;
@@ -35,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
         playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
         transformSize = transform.localScale;
         photonView = GetComponent<PhotonView>();
+        pl = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+        pl.AddPlayer(this.gameObject);
     }
 
     // Update is called once per frame

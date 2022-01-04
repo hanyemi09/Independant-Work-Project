@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using TMPro;
 
 public class ObjectStatsManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class ObjectStatsManager : MonoBehaviour
     RespawnPlayer respawnPlayer;
     [SerializeField] float objectHealth = 100f;
     [SerializeField] float objectMaxHealth = 100f;
-
+    [SerializeField] Transform damagePopup;
     public Slider slider;
 
     void Start()
@@ -47,6 +48,9 @@ public class ObjectStatsManager : MonoBehaviour
     public void TakeDamage(float damage)
     {
         objectHealth -= damage;
+        Transform go1 = Instantiate(damagePopup, gameObject.transform.position, damagePopup.rotation);
+        TextMeshPro tmp1 = go1.GetComponent<TextMeshPro>();
+        tmp1.text = damage.ToString();
     }
 
     [PunRPC]

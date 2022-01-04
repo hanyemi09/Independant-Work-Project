@@ -73,6 +73,10 @@ PrefabInstance:
       propertyPath: slider
       value: 
       objectReference: {fileID: 6973400346553821699}
+    - target: {fileID: -3542586850065419704, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
+      propertyPath: damagePopup
+      value: 
+      objectReference: {fileID: 6219535927369673050, guid: 57f8740d9b3979a43a101d9eba7cb1dd, type: 3}
     - target: {fileID: 3571313670945474697, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
       propertyPath: sceneViewId
       value: 0
