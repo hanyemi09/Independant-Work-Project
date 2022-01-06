@@ -8,7 +8,7 @@ public class EnemyAI : MonoBehaviour
     public NavMeshAgent agent;
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
-    GameObject[] currentPlayers;
+    List<GameObject> currentPlayers;
     public float health = 100f;
     // Patrolling
     public Vector3 walkPoint;
@@ -30,13 +30,12 @@ public class EnemyAI : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         //player = GameObject.FindWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-        pl = GameObject.Find("EventSystem").GetComponent<PlayerList>();
-
+        pl = GameObject.FindObjectOfType<PlayerList>();
     }
 
     void Start()
     {
-
+        currentPlayers = pl.GetList();
     }
 
     void Update()
@@ -44,7 +43,7 @@ public class EnemyAI : MonoBehaviour
 
         if (photonView.IsMine)
         {
-            currentPlayers = pl.GetPlayers();
+            currentPlayers = pl.GetList();
             playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
             playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
@@ -111,10 +110,10 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-    GameObject FindClosestPlayer(GameObject[] goArray)
+    GameObject FindClosestPlayer(List<GameObject> goArray)
     {
         GameObject go = null;
-        for (int i = 0; i < goArray.Length; i++)
+        for (int i = 0; i < goArray.Count; i++)
         {
             if(go == null)
             {

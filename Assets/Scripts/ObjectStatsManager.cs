@@ -48,6 +48,12 @@ public class ObjectStatsManager : MonoBehaviour
     public void TakeDamage(float damage)
     {
         objectHealth -= damage;
+        DamagePopUp(damage);
+
+    }
+
+    void DamagePopUp(float damage)
+    {
         Transform go1 = Instantiate(damagePopup, gameObject.transform.position, damagePopup.rotation);
         TextMeshPro tmp1 = go1.GetComponent<TextMeshPro>();
         tmp1.text = damage.ToString();

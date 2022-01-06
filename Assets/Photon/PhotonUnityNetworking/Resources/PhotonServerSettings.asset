@@ -54,6 +54,7 @@ MonoBehaviour:
   - ChasePlayer
   - Patrolling
   - AddPlayer
+  - GetList
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

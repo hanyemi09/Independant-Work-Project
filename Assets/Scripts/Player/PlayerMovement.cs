@@ -40,8 +40,8 @@ public class PlayerMovement : MonoBehaviour
         playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
         transformSize = transform.localScale;
         photonView = GetComponent<PhotonView>();
-        pl = GameObject.Find("EventSystem").GetComponent<PlayerList>();
-        pl.AddPlayer(this.gameObject);
+        pl = GameObject.FindObjectOfType<PlayerList>();
+        pl.AddToList(this.gameObject);
     }
 
     // Update is called once per frame
