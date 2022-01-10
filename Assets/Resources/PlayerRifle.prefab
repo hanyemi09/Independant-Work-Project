@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5693695550380161407}
   - component: {fileID: 7704546406429547307}
-  - component: {fileID: 7960484144891237601}
+  - component: {fileID: 4922979691991090243}
   m_Layer: 3
   m_Name: PlayerRifle
   m_TagString: Untagged
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8587179079478897912}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.048233192, y: 0, z: -0.000000009312627}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4130042693889983257}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnTimer: 2
---- !u!54 &7960484144891237601
+--- !u!54 &4922979691991090243
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,6 +77,10 @@ PrefabInstance:
       propertyPath: damagePopup
       value: 
       objectReference: {fileID: 6219535927369673050, guid: 57f8740d9b3979a43a101d9eba7cb1dd, type: 3}
+    - target: {fileID: 1535725550953489391, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
+      propertyPath: m_PositionModel.InterpolateOption
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3571313670945474697, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
       propertyPath: sceneViewId
       value: 0
@@ -115,7 +119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4314048817300822897, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4314048817300822897, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
       propertyPath: m_LocalRotation.w
@@ -151,7 +155,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5885120135490883942, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5885120135490883942, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 6988894874889650110, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
       propertyPath: weaponDamage
@@ -161,7 +169,8 @@ PrefabInstance:
       propertyPath: weaponDamageMultiplier
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5885120135490883942, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e1ed5b5648cd9724095d4be0989b7282, type: 3}
 --- !u!4 &4130042693889983257 stripped
 Transform:

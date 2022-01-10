@@ -11,10 +11,15 @@ public class SpawnPlayers : MonoBehaviour
     public float maxX;
     public float minZ;
     public float maxZ;
+    public PlayerList pl;
 
     void Awake()
     {
-        Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minZ, maxZ));
-        PhotonNetwork.Instantiate(playerPrefab.name, randomPosition, Quaternion.identity);
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            PhotonNetwork.Instantiate(playerPrefab.name, spawnPoints[i].transform.position, Quaternion.identity);
+        }
+        //Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minZ, maxZ));
+        //PhotonNetwork.Instantiate(playerPrefab.name, randomPosition, Quaternion.identity);
     }
 }
