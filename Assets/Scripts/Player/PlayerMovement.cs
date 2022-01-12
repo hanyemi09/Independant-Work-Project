@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         pl = GameObject.FindObjectOfType<PlayerList>();
         pl.AddToList(this.gameObject);
+        Debug.Log(pl.GetListLength());
     }
 
     // Update is called once per frame

@@ -16,11 +16,12 @@ public class ObjectStatsManager : MonoBehaviour
     [SerializeField] float objectMaxHealth = 100f;
     [SerializeField] Transform damagePopup;
     public Slider slider;
-
+    PowerupsSpawn powerupsSpawn;
     void Start()
     {
         photonView = GetComponent<PhotonView>();
         respawnPlayer = GetComponent<RespawnPlayer>();
+        powerupsSpawn = GameObject.Find("EventSystem").GetComponent<PowerupsSpawn>();
     }
 
     void Update()
@@ -39,6 +40,8 @@ public class ObjectStatsManager : MonoBehaviour
             }
             else
             {
+
+                SpawnPowerup();
                 photonView.RPC("DestroyObject", RpcTarget.All);
             }
         }
@@ -49,7 +52,11 @@ public class ObjectStatsManager : MonoBehaviour
     {
         objectHealth -= damage;
         DamagePopUp(damage);
+    }
 
+    void SpawnPowerup()
+    {
+        powerupsSpawn.GetComponent<PhotonView>().RPC("SpawnPowerup", RpcTarget.MasterClient, gameObject.transform);
     }
 
     void DamagePopUp(float damage)

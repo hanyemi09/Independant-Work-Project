@@ -133,7 +133,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupType: 0
   healAmount: 50
-  dmgMultiplier: 0
-  atkSpdMultiplier: 0
-  moveSpdMultiplier: 0
+  Multiplier: 0
   duration: 0

@@ -25,6 +25,10 @@ public class PlayerList : MonoBehaviour
         return playerList;
     }
 
+    public int GetListLength()
+    {
+        return playerList.Count;
+    }
     public void AddToList(GameObject Player)
     {
         playerList.Add(Player);

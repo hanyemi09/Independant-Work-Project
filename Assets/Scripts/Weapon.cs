@@ -27,7 +27,6 @@ public class Weapon : MonoBehaviour
     [SerializeField] WeaponShootType weaponShootType;
 
     [SerializeField] float projectileSpeed;
-    [SerializeField] float projectileSpread;
 
     [SerializeField] float shootSpread = 15f;
     [SerializeField] float pelletsPerShot;
@@ -40,9 +39,6 @@ public class Weapon : MonoBehaviour
     [SerializeField] float weaponAmmoReload;
     [SerializeField] float weaponMaxAmmoPerClip;
     [SerializeField] float weaponCurrentAmmo;
-    [SerializeField] float meleeAttackRange;
-    [SerializeField] LayerMask whatIsEnemies;
-    float distanceMultiplier = 4f;
     float timeSinceLastShot = 0f;
     float timeSinceLastReload = 0f;
     bool burstComplete = false;
