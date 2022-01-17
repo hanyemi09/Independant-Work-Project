@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Speed: 30
   m_LifeTime: 1
   m_Damage: 10
+  m_DamagePopup: {fileID: 3095084063356652598, guid: 1bae2f3584ad15541a8e3740b8826e3b, type: 3}
 --- !u!54 &-6901523676012992394
 Rigidbody:
   m_ObjectHideFlags: 0

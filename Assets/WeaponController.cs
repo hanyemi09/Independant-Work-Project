@@ -14,6 +14,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] float m_FullReloadTiming;
     [SerializeField] int m_TotalAmmo;
 
+    PhotonView m_MyPlayerPhotonView;
     float m_TimeSinceLastFired;
     int m_CurrentClipAmmo;
     
@@ -50,6 +51,7 @@ public class WeaponController : MonoBehaviour
         {
             Projectile proj = PhotonNetwork.Instantiate(m_BulletPrefab.name,goPosition,Quaternion.identity).gameObject.GetComponent<Projectile>();
             proj.transform.forward = direction;
+            proj.SetPhotonView(m_MyPlayerPhotonView);
             m_TimeSinceLastFired = 0f;
             m_CurrentClipAmmo--;
         }
@@ -91,5 +93,10 @@ public class WeaponController : MonoBehaviour
     public int GetTotalAmmo()
     {
         return m_TotalAmmo;
+    }
+
+    public void SetPhotonView(PhotonView photonView)
+    {
+        m_MyPlayerPhotonView = photonView;
     }
 }

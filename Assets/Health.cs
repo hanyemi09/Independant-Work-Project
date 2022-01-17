@@ -7,6 +7,8 @@ public class Health : MonoBehaviour
     [SerializeField] float m_HitPoints;
     [SerializeField] float m_MaxHitPoints;
     [SerializeField] float m_OverhealPoints;
+    [SerializeField] GameObject m_DamagePopup;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,9 +26,10 @@ public class Health : MonoBehaviour
     }
 
     [PunRPC]
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, PhotonView attackerPhotonView, PhotonView receiverPhotonView)
     {
         Debug.Log("Taking Damage");
+        PhotonNetwork.Instantiate(m_DamagePopup.name, attackerPhotonView.)
         m_HitPoints -= damage;
     }
 

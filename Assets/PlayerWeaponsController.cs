@@ -34,20 +34,14 @@ public class PlayerWeaponsController : MonoBehaviour
     [PunRPC]
     public void AddWeapon(string weaponToAdd)
     {
-        if(m_CurrentActiveWeapon != null)
+        if (m_CurrentActiveWeapon != null)
         {
             DropWeapon(m_CurrentActiveWeapon);
-            m_CurrentActiveWeapon = PhotonNetwork.Instantiate(weaponToAdd, m_WeaponHolder.transform.position, Quaternion.identity).GetComponent<WeaponController>();
-            m_CurrentActiveWeapon.transform.parent = m_WeaponHolder.transform;
-            m_WeaponPickupButton.gameObject.SetActive(false);
         }
-        else
-        {
-            Debug.Log("Spawning Weapon");
-            m_CurrentActiveWeapon = PhotonNetwork.Instantiate(weaponToAdd, m_WeaponHolder.transform.position, Quaternion.identity).GetComponent<WeaponController>();
-            m_CurrentActiveWeapon.transform.parent = m_WeaponHolder.transform;
-            m_WeaponPickupButton.gameObject.SetActive(false);
-        }
+        m_CurrentActiveWeapon = PhotonNetwork.Instantiate(weaponToAdd, m_WeaponHolder.transform.position, Quaternion.identity).GetComponent<WeaponController>();
+        m_CurrentActiveWeapon.transform.parent = m_WeaponHolder.transform;
+        m_WeaponPickupButton.gameObject.SetActive(false);
+        m_CurrentActiveWeapon.SetPhotonView(m_PhotonView);
     }
 
     public void DestroyWeapon(WeaponController weaponToDestroy)
