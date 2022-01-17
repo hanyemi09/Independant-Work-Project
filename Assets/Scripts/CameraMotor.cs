@@ -6,8 +6,8 @@ public class CameraMotor : MonoBehaviour
 {
 
     public Transform lookAt;
-    public float boundX = 2f;
-    public float boundZ = 2f;
+    public float boundX = 0f;
+    public float boundZ = 0f;
     float timeToLastTouch;
 
     Vector3 mousePos;
@@ -15,7 +15,6 @@ public class CameraMotor : MonoBehaviour
     void Start()
     {
         lookAt = GameObject.FindWithTag("Player").transform;
-        boundX = boundZ = 2f;
     }
 
     // Change everything to top down view;

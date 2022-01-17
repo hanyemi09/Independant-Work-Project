@@ -7,11 +7,7 @@ public class SpawnPlayers : MonoBehaviour
 {
     public GameObject playerPrefab;
     [SerializeField] SpawnPoint[] spawnPoints = new SpawnPoint[4];
-    public float minX;
-    public float maxX;
-    public float minZ;
-    public float maxZ;
-    public PlayerList pl;
+
     int i = 0;
     void Awake()
     {

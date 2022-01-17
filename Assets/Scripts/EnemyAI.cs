@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
+    float timeSinceLastShot = 0f;
 
     // attacking
     public float timeBetweenAttacks;
@@ -25,6 +26,9 @@ public class EnemyAI : MonoBehaviour
     public bool playerInSightRange, playerInAttackRange;
     PlayerList pl;
     PhotonView photonView;
+
+    public Transform shootPoint;
+    float weaponFireRateAmount = 1f;
     void Awake()
     {
         photonView = GetComponent<PhotonView>();
@@ -43,6 +47,7 @@ public class EnemyAI : MonoBehaviour
 
         if (photonView.IsMine)
         {
+            timeSinceLastShot += Time.deltaTime;
             currentPlayers = pl.GetList();
             playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
             playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -73,17 +78,22 @@ public class EnemyAI : MonoBehaviour
 
                 Debug.Log(FindClosestPlayer(currentPlayers).transform);
                 transform.LookAt(FindClosestPlayer(currentPlayers).transform);
-                if (!alreadyAttacked)
+
+
+            }
+
+            if(playerInSightRange || playerInAttackRange)
+            {
+                if (timeSinceLastShot > weaponFireRateAmount)
                 {
                     // Attack code here
-                    Rigidbody rb = PhotonNetwork.Instantiate(projectile.name, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-                    rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-                    rb.AddForce(transform.up * 8f, ForceMode.Impulse);
-
+                    Debug.Log("Enemy attack");
+                    Quaternion rot = shootPoint.rotation;
+                    PhotonNetwork.Instantiate(projectile.name, shootPoint.position, rot);
+                    timeSinceLastShot = 0f;
                     alreadyAttacked = true;
                     Invoke(nameof(ResetAttack), timeBetweenAttacks);
                 }
-
             }
         }
     }

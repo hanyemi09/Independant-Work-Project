@@ -613,9 +613,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1593066363631524236, guid: 24aeda25d04dd29448c4a4c4106bf0b1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1593066363631524236, guid: 24aeda25d04dd29448c4a4c4106bf0b1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7536495564389106722, guid: 24aeda25d04dd29448c4a4c4106bf0b1, type: 3}
       propertyPath: sceneViewId
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7536495564389106722, guid: 24aeda25d04dd29448c4a4c4106bf0b1, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -1559,6 +1567,10 @@ PrefabInstance:
       propertyPath: pl
       value: 
       objectReference: {fileID: 1643757350}
+    - target: {fileID: 4078610143955160245, guid: 62f4c02dd76630e4a8b4f3e04b911b98, type: 3}
+      propertyPath: playerPrefab
+      value: 
+      objectReference: {fileID: 8587179079478897912, guid: 072cfd682d3d8de41b3aace4e5704aaf, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62f4c02dd76630e4a8b4f3e04b911b98, type: 3}
 --- !u!1001 &6439595946285783425

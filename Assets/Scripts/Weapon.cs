@@ -22,7 +22,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] Rigidbody grenadePrefab;
     [SerializeField] Animator anim;
     [SerializeField] Transform damagePopup;
-    Transform shootPoint;
+    public Transform shootPoint;
 
     [SerializeField] WeaponShootType weaponShootType;
 
@@ -48,13 +48,15 @@ public class Weapon : MonoBehaviour
         weaponDamageAmount = weaponDamage;
         weaponFireRateAmount = weaponFireRate;
         timeSinceLastShot = weaponFireRate;
-        shootPoint = GameObject.Find("ShootPoint").transform;
         if(bulletPrefab != null)
         {
-            bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
+            //bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
         }
         anim = GetComponent<Animator>();
-        GetComponent<Collider>().enabled = false;
+        if(weaponShootType == WeaponShootType.Melee)
+        {
+            GetComponent<Collider>().enabled = false;
+        }
 
     }
 
@@ -209,7 +211,7 @@ public class Weapon : MonoBehaviour
     {
         weaponDamageMultiplier = dmgMultiplier;
         weaponDamageAmount = weaponDamage * weaponDamageMultiplier;
-        bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
+        //bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
         StartCoroutine(DamageBuffDuration(duration));
     }
 
@@ -218,7 +220,7 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(duration);
         weaponDamageMultiplier = 1f;
         weaponDamageAmount = weaponDamage * weaponDamageMultiplier;
-        bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
+        //bulletPrefab.SetProjectileValues(weaponDamageAmount, projectileSpeed);
     }
 
     public void AtkSpdBuff(float atkSpd, float duration)

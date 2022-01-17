@@ -6,68 +6,30 @@ using TMPro;
 public class Projectile : MonoBehaviour
 {
 
-    enum ProjectileType
-    {
-        BULLET
-    }
-    [SerializeField] ProjectileType projectileType;
-    [SerializeField] float bulletDamage = 20f;
-    [SerializeField] float bulletLifetime = 3f;
-    [SerializeField] float bulletSpeed = 200f;
-    Rigidbody rb;
-    PhotonView photonView;
-
-    // Start is called before the first frame update
+    Vector3 m_Velocity;
+    [SerializeField] float m_Speed;
+    [SerializeField] float m_LifeTime;
+    [SerializeField] float m_Damage;
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        photonView = GetComponent<PhotonView>();
-        rb.velocity = transform.forward * bulletSpeed;
+        m_Velocity = m_Speed * transform.forward;
+        Destroy(gameObject, m_LifeTime);
     }
 
-
-
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        bulletLifetime -= Time.deltaTime;
+        transform.position += m_Velocity * Time.deltaTime; 
+    }
 
-        if (bulletLifetime <= 0f)
+    void OnTriggerEnter(Collider other)
+    {
+        PhotonView pv = other.gameObject.GetComponent<PhotonView>();
+        Health health = other.gameObject.GetComponent<Health>();
+        Debug.Log("Hitting");
+        if(health && pv)
         {
-            GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.MasterClient);
+            pv.RPC("TakeDamage", RpcTarget.MasterClient, m_Damage);
         }
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        PhotonView pv = col.gameObject.GetComponent<PhotonView>();
-
-        if (pv != null)
-        {
-            pv.RPC("TakeDamage", RpcTarget.AllBuffered, bulletDamage);
-        }
-
-        GetComponent<PhotonView>().RPC("DestroyProjectile", RpcTarget.MasterClient);
-
-    }
-    public void SetProjectileValues(float bulletDmg, float bulletSpd)
-    {
-        bulletDamage = bulletDmg;
-        bulletSpeed = bulletSpd;
-    }
-    
-    public float GetProjectileSpeed()
-    {
-        return bulletSpeed;
-    }
-
-    [PunRPC]
-    void DestroyProjectile()
-    {
-        if (this.photonView.IsMine)
-        {
-            PhotonNetwork.Destroy(gameObject);
-            Debug.Log("Destroying" + gameObject);
-        }
+        PhotonNetwork.Destroy(gameObject);
     }
 }
