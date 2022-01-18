@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class HealthPickup : MonoBehaviour
+public class HealthPickup : Pickup
 {
 
     [SerializeField] float m_Health;
-    
+    PhotonView m_PhotonView;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_PhotonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
@@ -27,7 +28,7 @@ public class HealthPickup : MonoBehaviour
         if(health && health.GetHealth() < health.GetMaxHealth())
         {
             pv.RPC("AddHealth", RpcTarget.All, m_Health);
-            PhotonView.Destroy(this.gameObject);
+            m_PhotonView.RPC("DestroyPickup", RpcTarget.All);
         }
     }
 }

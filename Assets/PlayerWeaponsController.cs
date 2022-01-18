@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
-using Photon.Pun;
+
 public class PlayerWeaponsController : MonoBehaviour
 {
 
@@ -14,17 +14,32 @@ public class PlayerWeaponsController : MonoBehaviour
     GameObject m_WeaponHolder;
     GameObject m_ShootPoint;
     PhotonView m_PhotonView;
+    PlayerList m_PlayerList;
+
     // Start is called before the first frame update
     void Start()
+    {
+        m_PhotonView = GetComponent<PhotonView>();
+
+        if (!m_PhotonView)
+            return;
+
+        m_WeaponPickupButton = GameObject.Find("WeaponPickup").GetComponent<Button>();
+        m_WeaponPickupButton.onClick.AddListener(PickupWeapon);
+        m_ShootPoint = gameObject.transform.GetChild(0).gameObject;
+        m_WeaponHolder = gameObject.transform.GetChild(2).gameObject;
+        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+    }
+
+    public void Initialize()
     {
         m_WeaponPickupButton = GameObject.Find("WeaponPickup").GetComponent<Button>();
         m_WeaponPickupButton.gameObject.SetActive(false);
         m_WeaponPickupButton.onClick.AddListener(PickupWeapon);
         m_ShootPoint = gameObject.transform.GetChild(0).gameObject;
         m_WeaponHolder = gameObject.transform.GetChild(2).gameObject;
-        m_PhotonView = GetComponent<PhotonView>();
+        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -39,11 +54,17 @@ public class PlayerWeaponsController : MonoBehaviour
             DropWeapon(m_CurrentActiveWeapon);
         }
         m_CurrentActiveWeapon = PhotonNetwork.Instantiate(weaponToAdd, m_WeaponHolder.transform.position, Quaternion.identity).GetComponent<WeaponController>();
-        m_CurrentActiveWeapon.transform.parent = m_WeaponHolder.transform;
         m_WeaponPickupButton.gameObject.SetActive(false);
         m_CurrentActiveWeapon.SetPhotonView(m_PhotonView);
+        m_CurrentActiveWeapon.Initialize();
     }
 
+
+    [PunRPC]
+    public void SetWeaponParent(int weaponId, int playerId)
+    {
+        PhotonView.Find(weaponId).transform.parent = PhotonView.Find(playerId).transform.GetChild(2);
+    }
     public void DestroyWeapon(WeaponController weaponToDestroy)
     {
         Destroy(weaponToDestroy.gameObject);
@@ -72,6 +93,9 @@ public class PlayerWeaponsController : MonoBehaviour
 
     public void PickupWeapon()
     {
+        if (!m_PhotonView.IsMine)
+            return;
+
         Debug.Log("Picking up weapon");
         PhotonView pv = m_CurrentWeaponPickup.GetComponent<PhotonView>();
         if(pv != null)
@@ -81,9 +105,11 @@ public class PlayerWeaponsController : MonoBehaviour
         if(m_PhotonView != null)
         {
             string weaponName = m_CurrentWeaponPickup.GetWeaponPrefab().name;
-            m_PhotonView.RPC("AddWeapon", RpcTarget.All, weaponName);
+            AddWeapon(weaponName);
+            //m_PhotonView.RPC("AddWeapon", RpcTarget.All, weaponName);
+            m_PhotonView.RPC("SetWeaponParent", RpcTarget.All, m_CurrentActiveWeapon.GetPhotonView().ViewID, m_PhotonView.ViewID);
         }
-
+        CanPickupWeapon(false, null);
     }
 
     public void HandleShoot(Vector3 direction)
@@ -92,9 +118,9 @@ public class PlayerWeaponsController : MonoBehaviour
         if (m_CurrentActiveWeapon == null)
             return;
 
-        PhotonView pv = m_CurrentActiveWeapon.gameObject.GetComponent<PhotonView>();
-        pv.RPC("TryShoot", RpcTarget.All, direction, m_ShootPoint.transform.position);
-        //m_CurrentActiveWeapon.TryShoot(direction, m_ShootPoint.transform.position);
+        //PhotonView pv = m_CurrentActiveWeapon.gameObject.GetComponent<PhotonView>();
+        //pv.RPC("TryShoot", RpcTarget.All, direction, m_ShootPoint.transform.position);
+        m_CurrentActiveWeapon.TryShoot(direction, m_ShootPoint.transform);
     }
 
     public void HandleAddAmmo(int ammoAmount)

@@ -13,7 +13,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] float m_HalfReloadTiming;
     [SerializeField] float m_FullReloadTiming;
     [SerializeField] int m_TotalAmmo;
-
+    PhotonView m_PhotonView;
     PhotonView m_MyPlayerPhotonView;
     float m_TimeSinceLastFired;
     int m_CurrentClipAmmo;
@@ -23,8 +23,13 @@ public class WeaponController : MonoBehaviour
     void Start()
     {
         m_CurrentClipAmmo = m_AmmoPerClip;
+        m_PhotonView = GetComponent<PhotonView>();
     }
 
+    public void Initialize()
+    {
+        m_PhotonView = GetComponent<PhotonView>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -38,20 +43,18 @@ public class WeaponController : MonoBehaviour
     public void SpawnWeaponPickup(Transform transform)
     {
         // Instantiate
-        Instantiate(m_WeaponPickupPrefab, transform.position, transform.rotation);
+        PhotonNetwork.Instantiate(m_WeaponPickupPrefab.name, transform.position, transform.rotation);
     }
 
-    [PunRPC]
-    public void TryShoot(Vector3 direction, Vector3 goPosition)
+    public void TryShoot(Vector3 direction, Transform goPosition)
     {
         if (m_WeaponFireRate > m_TimeSinceLastFired)
             return;
 
         if(m_CurrentClipAmmo > 0)
         {
-            Projectile proj = PhotonNetwork.Instantiate(m_BulletPrefab.name,goPosition,Quaternion.identity).gameObject.GetComponent<Projectile>();
-            proj.transform.forward = direction;
-            proj.SetPhotonView(m_MyPlayerPhotonView);
+            Quaternion rot = goPosition.rotation;
+            Projectile proj = PhotonNetwork.Instantiate(m_BulletPrefab.name, goPosition.position,rot).gameObject.GetComponent<Projectile>();
             m_TimeSinceLastFired = 0f;
             m_CurrentClipAmmo--;
         }
@@ -98,5 +101,10 @@ public class WeaponController : MonoBehaviour
     public void SetPhotonView(PhotonView photonView)
     {
         m_MyPlayerPhotonView = photonView;
+    }
+
+    public PhotonView GetPhotonView()
+    {
+        return m_PhotonView;
     }
 }

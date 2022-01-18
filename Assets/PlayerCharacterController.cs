@@ -12,7 +12,7 @@ public class PlayerCharacterController : MonoBehaviour
     FixedJoystick m_AttackJoystick;
     PhotonView m_PhotonView;
     PlayerWeaponsController m_PlayerWeaponsController;
-
+    PlayerList m_PlayerList;
     float RotationSpeed = 10f;
     float BorderDirControl = 0.15f;
     float MoveSpeed = 5f;
@@ -31,7 +31,10 @@ public class PlayerCharacterController : MonoBehaviour
         m_MovementJoyStick = GameObject.Find("MovementJoystick").GetComponent<FixedJoystick>();
         m_AttackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
         m_PlayerWeaponsController = GetComponent<PlayerWeaponsController>();
-        
+        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+
+        if (m_PlayerList)
+            m_PlayerList.AddToList(this.gameObject);
     }
 
     void Update()

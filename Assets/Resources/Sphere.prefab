@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4872893086895266231}
   - component: {fileID: 5768115863647608820}
   - component: {fileID: 635785398834702143}
-  - component: {fileID: 1289568041767204858}
   - component: {fileID: 3309410934236867816}
   - component: {fileID: -2963318883669446653}
+  - component: {fileID: -5087172967940616537}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -84,19 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1289568041767204858
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3787684155624632701}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3309410934236867816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,10 +99,10 @@ MonoBehaviour:
   m_WeaponPickupPrefab: {fileID: 4121237989107997566, guid: 453b5bb29519a7247b9863150742cd4d, type: 3}
   m_BulletPrefab: {fileID: 4607391448250185078, guid: 9d52ac6cd02f4b249a609e32c2b69d72, type: 3}
   m_WeaponFireRate: 1
-  m_AmmoPerClip: 0
-  m_HalfReloadTiming: 0
-  m_FullReloadTiming: 0
-  m_TotalAmmo: 0
+  m_AmmoPerClip: 99
+  m_HalfReloadTiming: 0.2
+  m_FullReloadTiming: 3
+  m_TotalAmmo: 9999
 --- !u!114 &-2963318883669446653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +121,24 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -5087172967940616537}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-5087172967940616537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787684155624632701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

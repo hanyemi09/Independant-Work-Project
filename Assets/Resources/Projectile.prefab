@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4607391448250185078}
   - component: {fileID: -6901523676012992394}
   - component: {fileID: 5245766595463650883}
-  - component: {fileID: -2422740249109768878}
+  - component: {fileID: -9128476695041206741}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Speed: 30
-  m_LifeTime: 1
+  m_LifeTime: 99
   m_Damage: 10
   m_DamagePopup: {fileID: 3095084063356652598, guid: 1bae2f3584ad15541a8e3740b8826e3b, type: 3}
 --- !u!54 &-6901523676012992394
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &-2422740249109768878
+--- !u!114 &-9128476695041206741
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

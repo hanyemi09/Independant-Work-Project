@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 883713450852085907}
   - component: {fileID: 6344480654406266352}
   - component: {fileID: 8813485132639927482}
-  - component: {fileID: 8969142929818726187}
   - component: {fileID: 6563628498924393260}
   - component: {fileID: -7394784426155118291}
+  - component: {fileID: -2274411278531291907}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -84,19 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8969142929818726187
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4462677781254309589}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6563628498924393260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,11 +98,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_WeaponPickupPrefab: {fileID: 4121237989107997566, guid: 453b5bb29519a7247b9863150742cd4d, type: 3}
   m_BulletPrefab: {fileID: 4607391448250185078, guid: 9d52ac6cd02f4b249a609e32c2b69d72, type: 3}
-  m_WeaponFireRate: 1
-  m_AmmoPerClip: 0
-  m_HalfReloadTiming: 0
-  m_FullReloadTiming: 0
-  m_TotalAmmo: 0
+  m_WeaponFireRate: 0.1
+  m_AmmoPerClip: 20
+  m_HalfReloadTiming: 0.2
+  m_FullReloadTiming: 0.5
+  m_TotalAmmo: 500
 --- !u!114 &-7394784426155118291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +121,24 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -2274411278531291907}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-2274411278531291907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4462677781254309589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
