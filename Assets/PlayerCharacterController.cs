@@ -13,16 +13,20 @@ public class PlayerCharacterController : MonoBehaviour
     PhotonView m_PhotonView;
     PlayerWeaponsController m_PlayerWeaponsController;
     PlayerList m_PlayerList;
-    float RotationSpeed = 10f;
-    float BorderDirControl = 0.15f;
-    float MoveSpeed = 5f;
-    float MoveSpeedAmt = 5f;
-    float MoveSpeedMultiplier = 1f;
-
+    Transform m_GroundCheck;
+    PlayerHealthBar m_PlayerHealthBar;
+    float m_RotationSpeed = 10f;
+    float m_BorderDirControl = 0.15f;
+    float m_MoveSpeed = 5f;
+    float m_MoveSpeedAmt = 5f;
+    float m_MoveSpeedMultiplier = 1f;
+    bool m_IsGrounded = false;
+    [SerializeField] LayerMask m_GroundMask;
+    float m_Gravity = -9.81f; 
     Vector3 MoveDelta;
-
-    public Vector3 CharacterVelocity { get; set; }
-    public bool IsGrounded { get; private set; }
+    float m_GroundDistance = 0.3f;
+    Vector3 m_CharacterVelocity;
+    public bool IsGrounded;
 
     void Start()
     {
@@ -32,6 +36,9 @@ public class PlayerCharacterController : MonoBehaviour
         m_AttackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
         m_PlayerWeaponsController = GetComponent<PlayerWeaponsController>();
         m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+        m_PlayerHealthBar = GameObject.Find("PlayerHealthBar").GetComponent<PlayerHealthBar>();
+        if (m_PlayerHealthBar)
+            m_PlayerHealthBar.Initialize(this.gameObject);
 
         if (m_PlayerList)
             m_PlayerList.AddToList(this.gameObject);
@@ -56,7 +63,7 @@ public class PlayerCharacterController : MonoBehaviour
             // If player is attacking, get use the direction of attack joystick instead
             Vector3 dirAttack = new Vector3(ax, 0, az);
 
-            if (dirAttack.magnitude > BorderDirControl)
+            if (dirAttack.magnitude > m_BorderDirControl)
             {
                 dir = dirAttack;
             }
@@ -76,13 +83,23 @@ public class PlayerCharacterController : MonoBehaviour
         {
             Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
             //Debug.Log("Rotation: " + rotation);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * m_RotationSpeed);
         }
 
-        MoveSpeedAmt = MoveSpeed * MoveSpeedMultiplier;
+        m_MoveSpeedAmt = m_MoveSpeed * m_MoveSpeedMultiplier;
+
+        // Gravity
+        MoveDelta.y += m_Gravity * Time.deltaTime;
+
+        IsGrounded = Physics.CheckSphere(m_GroundCheck.position, m_GroundDistance, m_GroundMask);
+
+        if(IsGrounded && m_CharacterVelocity.y < 0)
+        {
+            m_CharacterVelocity.y = -2f;
+        }
 
         // Moving
-        CharacterVelocity = MoveDelta * Time.deltaTime * MoveSpeedAmt;
-        m_Controller.Move(CharacterVelocity);
+        m_CharacterVelocity = MoveDelta * Time.deltaTime * m_MoveSpeedAmt;
+        m_Controller.Move(m_CharacterVelocity);
     }
 }
