@@ -12,7 +12,7 @@ public class WeaponPickup : Pickup
     // Start is called before the first frame update
     void Start()
     {
-        
+        base.Start();
     }
 
     void OnTriggerEnter(Collider other)

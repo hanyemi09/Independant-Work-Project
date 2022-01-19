@@ -7,18 +7,11 @@ public class HealthPickup : Pickup
 {
 
     [SerializeField] float m_Health;
-    PhotonView m_PhotonView;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_PhotonView = GetComponent<PhotonView>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.Start();
     }
 
     void OnTriggerEnter(Collider other)

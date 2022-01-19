@@ -9,7 +9,7 @@ public class PowerupsSpawn : MonoBehaviour
     [SerializeField] Powerups[] powerup = new Powerups[4];
 
     [PunRPC]
-    void SpawnPowerup(Transform transform)
+    public void SpawnPowerup(Transform transform)
     {
         Debug.Log("Spawning powerup! ");
         int random = Random.Range(0, 100);

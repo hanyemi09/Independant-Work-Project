@@ -7,17 +7,6 @@ public class PlayerList : MonoBehaviour
 {
 
     List<GameObject> playerList = new List<GameObject>();
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     [PunRPC]
     public List<GameObject> GetList()
@@ -25,6 +14,15 @@ public class PlayerList : MonoBehaviour
         return playerList;
     }
 
+    public GameObject GetPlayerByViewID(int ViewID)
+    {
+       GameObject go = PhotonView.Find(ViewID).gameObject;
+       return go;
+    }
+    public GameObject GetPlayerByIndex(int index)
+    {
+        return playerList[index];
+    }
     public int GetListLength()
     {
         return playerList.Count;

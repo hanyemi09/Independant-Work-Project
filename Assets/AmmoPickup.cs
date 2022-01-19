@@ -6,11 +6,10 @@ using Photon.Pun;
 public class AmmoPickup : Pickup
 {
     [SerializeField] int m_AmmoPickupAmount;
-    PhotonView m_PhotonView;
 
     void Start()
     {
-        m_PhotonView = GetComponent<PhotonView>();
+        base.Start();
     }
 
     void OnTriggerEnter(Collider other)

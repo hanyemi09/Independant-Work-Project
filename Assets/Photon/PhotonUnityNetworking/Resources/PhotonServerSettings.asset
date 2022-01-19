@@ -65,6 +65,9 @@ MonoBehaviour:
   - SetWeaponParent
   - initializeid
   - DisableObject
+  - SpawnPlayerPosition
+  - InitializeID
+  - SetPlayersStartingPosition
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

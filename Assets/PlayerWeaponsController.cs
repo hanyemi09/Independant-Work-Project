@@ -15,14 +15,16 @@ public class PlayerWeaponsController : MonoBehaviour
     GameObject m_ShootPoint;
     PhotonView m_PhotonView;
     PlayerList m_PlayerList;
-
+    WeaponHUDManager m_WeaponHUDManager;
     // Start is called before the first frame update
     void Start()
     {
         m_PhotonView = GetComponent<PhotonView>();
 
-        if (!m_PhotonView)
-            return;
+        m_WeaponHUDManager = GameObject.Find("WeaponHUD").GetComponent<WeaponHUDManager>();
+
+        if (m_WeaponHUDManager != null)
+            m_WeaponHUDManager.Initialize(this.gameObject);
 
         m_WeaponPickupButton = GameObject.Find("WeaponPickup").GetComponent<Button>();
         m_WeaponPickupButton.onClick.AddListener(PickupWeapon);
@@ -34,7 +36,6 @@ public class PlayerWeaponsController : MonoBehaviour
     public void Initialize()
     {
         m_WeaponPickupButton = GameObject.Find("WeaponPickup").GetComponent<Button>();
-        m_WeaponPickupButton.gameObject.SetActive(false);
         m_WeaponPickupButton.onClick.AddListener(PickupWeapon);
         m_ShootPoint = gameObject.transform.GetChild(0).gameObject;
         m_WeaponHolder = gameObject.transform.GetChild(2).gameObject;
@@ -59,16 +60,10 @@ public class PlayerWeaponsController : MonoBehaviour
         m_CurrentActiveWeapon.Initialize();
     }
 
-
     [PunRPC]
     public void SetWeaponParent(int weaponId, int playerId)
     {
         PhotonView.Find(weaponId).transform.parent = PhotonView.Find(playerId).transform.GetChild(2);
-    }
-    public void DestroyWeapon(WeaponController weaponToDestroy)
-    {
-        Destroy(weaponToDestroy.gameObject);
-        m_CurrentActiveWeapon = null;
     }
 
     public void DropWeapon(WeaponController weaponToDrop)
@@ -77,11 +72,7 @@ public class PlayerWeaponsController : MonoBehaviour
         weaponToDrop.SpawnWeaponPickup(transform);
         Destroy(m_CurrentActiveWeapon.gameObject);
         m_CurrentActiveWeapon = null;
-    }
-
-    public WeaponController GetActiveWeapon()
-    {
-        return m_CurrentActiveWeapon;
+        m_WeaponHUDManager.OnWeaponSwitched(m_CurrentActiveWeapon);
     }
 
     public void CanPickupWeapon(bool flag, WeaponPickup weaponPickup)
@@ -106,8 +97,8 @@ public class PlayerWeaponsController : MonoBehaviour
         {
             string weaponName = m_CurrentWeaponPickup.GetWeaponPrefab().name;
             AddWeapon(weaponName);
-            //m_PhotonView.RPC("AddWeapon", RpcTarget.All, weaponName);
             m_PhotonView.RPC("SetWeaponParent", RpcTarget.All, m_CurrentActiveWeapon.GetPhotonView().ViewID, m_PhotonView.ViewID);
+            m_WeaponHUDManager.OnWeaponSwitched(m_CurrentActiveWeapon);
         }
         CanPickupWeapon(false, null);
     }
@@ -121,6 +112,7 @@ public class PlayerWeaponsController : MonoBehaviour
         //PhotonView pv = m_CurrentActiveWeapon.gameObject.GetComponent<PhotonView>();
         //pv.RPC("TryShoot", RpcTarget.All, direction, m_ShootPoint.transform.position);
         m_CurrentActiveWeapon.TryShoot(direction, m_ShootPoint.transform);
+        m_WeaponHUDManager.UpdateCurrentAmmo(m_CurrentActiveWeapon);
     }
 
     public void HandleAddAmmo(int ammoAmount)
@@ -128,6 +120,12 @@ public class PlayerWeaponsController : MonoBehaviour
         if(m_CurrentActiveWeapon != null)
         {
             m_CurrentActiveWeapon.TryAddAmmo(ammoAmount);
+            m_WeaponHUDManager.UpdateTotalAmmo(m_CurrentActiveWeapon);
         }
+    }
+
+    public WeaponController GetCurrentActiveWeapon()
+    {
+        return m_CurrentActiveWeapon;
     }
 }

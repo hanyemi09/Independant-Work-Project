@@ -13,6 +13,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] float m_HalfReloadTiming;
     [SerializeField] float m_FullReloadTiming;
     [SerializeField] int m_TotalAmmo;
+    WeaponHUDManager m_WeaponHUDManager;
     PhotonView m_PhotonView;
     PhotonView m_MyPlayerPhotonView;
     float m_TimeSinceLastFired;
@@ -24,19 +25,24 @@ public class WeaponController : MonoBehaviour
     {
         m_CurrentClipAmmo = m_AmmoPerClip;
         m_PhotonView = GetComponent<PhotonView>();
+        m_WeaponHUDManager = GameObject.Find("WeaponHUD").GetComponent<WeaponHUDManager>();
     }
 
     public void Initialize()
     {
         m_PhotonView = GetComponent<PhotonView>();
+        m_WeaponHUDManager = GameObject.Find("WeaponHUD").GetComponent<WeaponHUDManager>();
     }
     // Update is called once per frame
     void Update()
     {
         m_TimeSinceLastFired += Time.deltaTime;
-        if(m_CurrentClipAmmo <= 0)
+
+        if (m_CurrentClipAmmo <= 0)
         {
             TryReload();
+            m_WeaponHUDManager.UpdateCurrentAmmo(this);
+            m_WeaponHUDManager.UpdateTotalAmmo(this);
         }
     }
 
@@ -57,6 +63,11 @@ public class WeaponController : MonoBehaviour
             Projectile proj = PhotonNetwork.Instantiate(m_BulletPrefab.name, goPosition.position,rot).gameObject.GetComponent<Projectile>();
             m_TimeSinceLastFired = 0f;
             m_CurrentClipAmmo--;
+        }
+
+        if(m_CurrentClipAmmo <= 0)
+        {
+            TryReload();
         }
     }
 
@@ -106,5 +117,10 @@ public class WeaponController : MonoBehaviour
     public PhotonView GetPhotonView()
     {
         return m_PhotonView;
+    }
+
+    public int GetAmmoPerClip()
+    {
+        return m_AmmoPerClip;
     }
 }

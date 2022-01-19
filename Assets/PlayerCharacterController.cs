@@ -15,6 +15,7 @@ public class PlayerCharacterController : MonoBehaviour
     PlayerList m_PlayerList;
     Transform m_GroundCheck;
     PlayerHealthBar m_PlayerHealthBar;
+    SpawnPlayers m_SpawnPlayers;
     float m_RotationSpeed = 10f;
     float m_BorderDirControl = 0.15f;
     float m_MoveSpeed = 5f;
@@ -22,9 +23,9 @@ public class PlayerCharacterController : MonoBehaviour
     float m_MoveSpeedMultiplier = 1f;
     bool m_IsGrounded = false;
     [SerializeField] LayerMask m_GroundMask;
-    float m_Gravity = -9.81f; 
+    float m_Gravity = -9.81f * 6; 
     Vector3 MoveDelta;
-    float m_GroundDistance = 0.3f;
+    float m_GroundDistance = 0.1f;
     Vector3 m_CharacterVelocity;
     public bool IsGrounded;
 
@@ -35,13 +36,16 @@ public class PlayerCharacterController : MonoBehaviour
         m_MovementJoyStick = GameObject.Find("MovementJoystick").GetComponent<FixedJoystick>();
         m_AttackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
         m_PlayerWeaponsController = GetComponent<PlayerWeaponsController>();
-        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
-        m_PlayerHealthBar = GameObject.Find("PlayerHealthBar").GetComponent<PlayerHealthBar>();
-        if (m_PlayerHealthBar)
-            m_PlayerHealthBar.Initialize(this.gameObject);
+        m_PlayerList = GameObject.FindObjectOfType<PlayerList>();
+        m_PlayerHealthBar = GameObject.Find("HealthBar").GetComponent<PlayerHealthBar>();
+        m_GroundCheck = gameObject.transform.GetChild(1).gameObject.GetComponent<Transform>();
+        m_SpawnPlayers = GameObject.Find("EventSystem").GetComponent<SpawnPlayers>();
 
         if (m_PlayerList)
             m_PlayerList.AddToList(this.gameObject);
+
+        if (m_PlayerHealthBar)
+            m_PlayerHealthBar.Initialize(this.gameObject);
     }
 
     void Update()
@@ -93,13 +97,14 @@ public class PlayerCharacterController : MonoBehaviour
 
         IsGrounded = Physics.CheckSphere(m_GroundCheck.position, m_GroundDistance, m_GroundMask);
 
-        if(IsGrounded && m_CharacterVelocity.y < 0)
-        {
-            m_CharacterVelocity.y = -2f;
-        }
 
         // Moving
         m_CharacterVelocity = MoveDelta * Time.deltaTime * m_MoveSpeedAmt;
+
+        if (IsGrounded && MoveDelta.y < 0)
+        {
+            m_CharacterVelocity.y = -2f;
+        }
         m_Controller.Move(m_CharacterVelocity);
     }
 }

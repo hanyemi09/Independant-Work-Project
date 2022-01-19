@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+[RequireComponent(typeof(PhotonView)), RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(Collider))]
+
 public class Pickup : MonoBehaviour
 {
 
@@ -10,17 +12,20 @@ public class Pickup : MonoBehaviour
     public AudioClip m_PickupSFX;
 
     [Tooltip("Frequency at which the item will move up and down")]
-    [SerializeField] float m_VerticalBobFrequency = 1f;
+    [SerializeField] protected float m_VerticalBobFrequency = 1;
     [Tooltip("Distance the item will move up and down")]
-    [SerializeField] float m_BobbingAmount = 1f;
+    [SerializeField] protected float m_BobbingAmount = 1f;
     [Tooltip("Rotation angle per second")]
-    [SerializeField] float m_RotatingSpeed = 360f;
-    Vector3 m_StartPosition;
+    [SerializeField] protected float m_RotatingSpeed = 45f;
     Rigidbody m_PickupRigidbody;
     Collider m_Collider;
+    protected Vector3 m_StartPosition;
+    protected PhotonView m_PhotonView;
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        m_PhotonView = this.GetComponent<PhotonView>();
+
         m_PickupRigidbody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<Collider>();
 
@@ -28,13 +33,18 @@ public class Pickup : MonoBehaviour
         m_PickupRigidbody.isKinematic = true;
         m_Collider.isTrigger = true;
 
-        // Remember start position for animation
         m_StartPosition = transform.position;
+
+        m_RotatingSpeed = Random.Range(45f, 90f);
+        m_VerticalBobFrequency = Random.Range(-0.5f, 2f);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!m_PhotonView.IsMine)
+            return;
+
         // Handle bobbing
         float bobbingAnimationPhase = ((Mathf.Sin(Time.time * m_VerticalBobFrequency) * 0.5f) + 0.5f) * m_BobbingAmount;
         transform.position = m_StartPosition + Vector3.up * bobbingAnimationPhase;
