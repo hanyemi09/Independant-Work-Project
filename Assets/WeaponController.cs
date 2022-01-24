@@ -5,7 +5,22 @@ using Photon.Pun;
 
 public class WeaponController : MonoBehaviour
 {
+    public  enum WeaponType
+    {
+        RANGED,
+        MELEE,
+        TOTALTYPES,
+        NONE,
+    }
 
+    public enum ReloadType
+    {
+        SINGLE,
+        FULL,
+        TOTALTYPES,
+    }
+    [SerializeField] WeaponType m_WeaponType;
+    [SerializeField] ReloadType m_ReloadType;
     [SerializeField] WeaponPickup m_WeaponPickupPrefab;
     [SerializeField] Projectile m_BulletPrefab;
     [SerializeField] float m_WeaponFireRate;
@@ -13,12 +28,14 @@ public class WeaponController : MonoBehaviour
     [SerializeField] float m_HalfReloadTiming;
     [SerializeField] float m_FullReloadTiming;
     [SerializeField] int m_TotalAmmo;
+    [SerializeField] Animator m_Animator;
     WeaponHUDManager m_WeaponHUDManager;
     PhotonView m_PhotonView;
     PhotonView m_MyPlayerPhotonView;
     float m_TimeSinceLastFired;
     int m_CurrentClipAmmo;
-    
+
+    int m_PunchCombo = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +43,7 @@ public class WeaponController : MonoBehaviour
         m_CurrentClipAmmo = m_AmmoPerClip;
         m_PhotonView = GetComponent<PhotonView>();
         m_WeaponHUDManager = GameObject.Find("WeaponHUD").GetComponent<WeaponHUDManager>();
+        m_Animator = GetComponent<Animator>();
     }
 
     public void Initialize()
@@ -52,25 +70,63 @@ public class WeaponController : MonoBehaviour
         PhotonNetwork.Instantiate(m_WeaponPickupPrefab.name, transform.position, transform.rotation);
     }
 
-    public void TryShoot(Vector3 direction, Transform goPosition)
+    public virtual void TryShoot(Vector3 direction, Transform goPosition)
     {
         if (m_WeaponFireRate > m_TimeSinceLastFired)
             return;
 
-        if(m_CurrentClipAmmo > 0)
+        if(m_WeaponType == WeaponType.RANGED)
         {
-            Quaternion rot = goPosition.rotation;
-            Projectile proj = PhotonNetwork.Instantiate(m_BulletPrefab.name, goPosition.position,rot).gameObject.GetComponent<Projectile>();
-            m_TimeSinceLastFired = 0f;
-            m_CurrentClipAmmo--;
-        }
+            if (m_CurrentClipAmmo > 0)
+            {
+                Quaternion rot = goPosition.rotation;
+                Projectile proj = PhotonNetwork.Instantiate(m_BulletPrefab.name, goPosition.position, rot).gameObject.GetComponent<Projectile>();
+                m_CurrentClipAmmo--;
+            }
 
-        if(m_CurrentClipAmmo <= 0)
-        {
-            TryReload();
+            if (m_CurrentClipAmmo <= 0)
+            {
+                TryReload();
+            }
         }
+        else if(m_WeaponType == WeaponType.MELEE)
+        {
+            if (m_Animator == null)
+                return;
+
+            if (m_TimeSinceLastFired > 1f)
+            {
+                m_PunchCombo = 0;
+            }
+            m_TimeSinceLastFired = 0f;
+            GetComponent<Collider>().enabled = true;
+
+            if(m_PunchCombo == 0)
+            {
+                m_Animator.SetTrigger("FirstPunch");
+                m_PunchCombo = 1;
+            }
+            else if(m_PunchCombo == 1)
+            {
+                m_Animator.SetTrigger("SecondPunch");
+                m_PunchCombo = 2;
+            }
+            else if(m_PunchCombo == 2)
+            {
+                m_Animator.SetTrigger("ThirdPunch");
+                m_PunchCombo = 0;
+            }
+
+            //StartCoroutine(PlayMeleeAnimation());
+        }
+        m_TimeSinceLastFired = 0f;
+
     }
 
+    IEnumerator PlayMeleeAnimation()
+    {
+        yield return new WaitForSeconds(m_Animator.GetCurrentAnimatorStateInfo(0).length);
+    }
     public void TryReload()
     {
         if (m_TotalAmmo <= 0)
@@ -78,20 +134,39 @@ public class WeaponController : MonoBehaviour
 
         m_TimeSinceLastFired = 0;
 
-        if (m_CurrentClipAmmo > 0)
+        if(m_ReloadType == ReloadType.FULL)
         {
-            int ammoAdded = m_AmmoPerClip - m_CurrentClipAmmo;
+            if (m_CurrentClipAmmo > 0)
+            {
+                int ammoAdded = m_AmmoPerClip - m_CurrentClipAmmo;
+                m_CurrentClipAmmo += ammoAdded;
+                m_TotalAmmo -= ammoAdded;
+                m_TimeSinceLastFired -= m_HalfReloadTiming;
+            }
+            else
+            {
+                int ammoAdded = m_AmmoPerClip - m_CurrentClipAmmo;
+                m_CurrentClipAmmo += ammoAdded;
+                m_TotalAmmo -= ammoAdded;
+                m_TimeSinceLastFired -= m_FullReloadTiming;
+            }
+        }
+        else if(m_ReloadType == ReloadType.SINGLE)
+        {
+            if (m_CurrentClipAmmo > 0)
+            {
+
+                m_TimeSinceLastFired -= m_HalfReloadTiming;
+            }
+            else
+            {
+                m_TimeSinceLastFired -= m_FullReloadTiming;
+            }
+            int ammoAdded = 1;
             m_CurrentClipAmmo += ammoAdded;
             m_TotalAmmo -= ammoAdded;
-            m_TimeSinceLastFired -= m_HalfReloadTiming;
         }
-        else
-        {
-            int ammoAdded = m_AmmoPerClip - m_CurrentClipAmmo;
-            m_CurrentClipAmmo += ammoAdded;
-            m_TotalAmmo -= ammoAdded;
-            m_TimeSinceLastFired -= m_FullReloadTiming;
-        }
+
     }
 
     public void TryAddAmmo(int ammoAmount)
@@ -122,5 +197,10 @@ public class WeaponController : MonoBehaviour
     public int GetAmmoPerClip()
     {
         return m_AmmoPerClip;
+    }
+
+    public WeaponType GetWeaponType()
+    {
+        return m_WeaponType;
     }
 }

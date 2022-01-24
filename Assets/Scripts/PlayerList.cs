@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using Photon.Pun;
 
@@ -7,6 +8,25 @@ public class PlayerList : MonoBehaviour
 {
 
     List<GameObject> playerList = new List<GameObject>();
+    [SerializeField] GameObject m_GameEnd;
+    Canvas m_Canvas;
+
+    void Start()
+    {
+        m_Canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+    }
+    void Update()
+    {
+        if(playerList.Count <= 1)
+        {
+            GameEnd();
+        }
+    }
+
+    public void GameEnd()
+    {
+        Instantiate(m_GameEnd, m_Canvas.transform);
+    }
 
     [PunRPC]
     public List<GameObject> GetList()
@@ -14,6 +34,18 @@ public class PlayerList : MonoBehaviour
         return playerList;
     }
 
+    public int GetPlayerIndexByViewID(int ViewID)
+    {
+        for(int i = 0; i < playerList.Count; i++)
+        {
+            if (playerList[i].gameObject.GetComponent<PhotonView>().ViewID == ViewID)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
     public GameObject GetPlayerByViewID(int ViewID)
     {
        GameObject go = PhotonView.Find(ViewID).gameObject;

@@ -37,12 +37,15 @@ public class PlayerCharacterController : MonoBehaviour
         m_AttackJoystick = GameObject.Find("AttackJoystick").GetComponent<FixedJoystick>();
         m_PlayerWeaponsController = GetComponent<PlayerWeaponsController>();
         m_PlayerList = GameObject.FindObjectOfType<PlayerList>();
+
+        if (m_PlayerList)
+            m_PlayerList.AddToList(this.gameObject);
+
         m_PlayerHealthBar = GameObject.Find("HealthBar").GetComponent<PlayerHealthBar>();
         m_GroundCheck = gameObject.transform.GetChild(1).gameObject.GetComponent<Transform>();
         m_SpawnPlayers = GameObject.Find("EventSystem").GetComponent<SpawnPlayers>();
 
-        if (m_PlayerList)
-            m_PlayerList.AddToList(this.gameObject);
+
 
         if (m_PlayerHealthBar)
             m_PlayerHealthBar.Initialize(this.gameObject);

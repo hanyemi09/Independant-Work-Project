@@ -31,6 +31,10 @@ public class Health : MonoBehaviour
         }
         else if(m_HitPoints <= 0 && gameObject.layer == 3)
         {
+            PlayerWeaponsController playerWeaponsController = GetComponent<PlayerWeaponsController>();
+            playerWeaponsController.DisableUI();
+            CameraMotor camera = GameObject.Find("Main Camera").GetComponent<CameraMotor>();
+            camera.SwitchCamera(false);
             m_PhotonView.RPC("DisableObject", RpcTarget.AllBuffered);
 
         }

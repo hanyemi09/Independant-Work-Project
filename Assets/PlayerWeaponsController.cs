@@ -16,11 +16,13 @@ public class PlayerWeaponsController : MonoBehaviour
     PhotonView m_PhotonView;
     PlayerList m_PlayerList;
     WeaponHUDManager m_WeaponHUDManager;
+    WeaponController.WeaponType m_CurrentActiveWeaponType;
+    Canvas UICanvas;
     // Start is called before the first frame update
     void Start()
     {
         m_PhotonView = GetComponent<PhotonView>();
-
+        UICanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         m_WeaponHUDManager = GameObject.Find("WeaponHUD").GetComponent<WeaponHUDManager>();
 
         if (m_WeaponHUDManager != null)
@@ -47,6 +49,14 @@ public class PlayerWeaponsController : MonoBehaviour
         // Weapon bobbing
     }
 
+    public void DisableUI()
+    {
+        for(int i = 0; i < UICanvas.transform.childCount; i++)
+        {
+            UICanvas.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
     [PunRPC]
     public void AddWeapon(string weaponToAdd)
     {
@@ -55,6 +65,7 @@ public class PlayerWeaponsController : MonoBehaviour
             DropWeapon(m_CurrentActiveWeapon);
         }
         m_CurrentActiveWeapon = PhotonNetwork.Instantiate(weaponToAdd, m_WeaponHolder.transform.position, Quaternion.identity).GetComponent<WeaponController>();
+        m_CurrentActiveWeaponType = m_CurrentActiveWeapon.GetWeaponType();
         m_WeaponPickupButton.gameObject.SetActive(false);
         m_CurrentActiveWeapon.SetPhotonView(m_PhotonView);
         m_CurrentActiveWeapon.Initialize();
@@ -72,6 +83,7 @@ public class PlayerWeaponsController : MonoBehaviour
         weaponToDrop.SpawnWeaponPickup(transform);
         Destroy(m_CurrentActiveWeapon.gameObject);
         m_CurrentActiveWeapon = null;
+        m_CurrentActiveWeaponType = WeaponController.WeaponType.NONE;
         m_WeaponHUDManager.OnWeaponSwitched(m_CurrentActiveWeapon);
     }
 
@@ -117,7 +129,7 @@ public class PlayerWeaponsController : MonoBehaviour
 
     public void HandleAddAmmo(int ammoAmount)
     {
-        if(m_CurrentActiveWeapon != null)
+        if(m_CurrentActiveWeapon != null && m_CurrentActiveWeaponType == WeaponController.WeaponType.RANGED)
         {
             m_CurrentActiveWeapon.TryAddAmmo(ammoAmount);
             m_WeaponHUDManager.UpdateTotalAmmo(m_CurrentActiveWeapon);

@@ -1,20 +1,22 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 public class CameraMotor : MonoBehaviour
 {
-
+    PlayerList m_PlayerList;
     public Transform lookAt;
     public float boundX = 0f;
     public float boundZ = 0f;
     float timeToLastTouch;
-
+    int m_PlayerIndex;
     Vector3 mousePos;
 
     void Start()
     {
         lookAt = GameObject.FindWithTag("Player").transform;
+        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+        m_PlayerIndex = m_PlayerList.GetPlayerIndexByViewID(lookAt.gameObject.GetComponent<PhotonView>().ViewID);
     }
 
     // Change everything to top down view;
@@ -71,6 +73,35 @@ public class CameraMotor : MonoBehaviour
         else if(lookAt == null)
         {
             transform.position = savedLastPos;
+            SwitchCamera(false);
         }
     }
+
+    public void SwitchCamera(bool Reverse)
+    {
+        CameraSwitch m_CameraSwitch = GetComponent<CameraSwitch>();
+        m_CameraSwitch.enabled = true;
+        //m_CameraSwitch.PlayerSpectatorMode();
+        if (Reverse)
+        {
+            m_PlayerIndex -= 1;
+        }
+        else
+        {
+            m_PlayerIndex += 1;
+        }
+
+        //if (m_PlayerIndex >= m_PlayerList.GetListLength())
+        //{
+        //    m_PlayerIndex = 0;
+        //}
+        //else
+        //{
+        //    m_PlayerIndex = m_PlayerList.GetListLength() - 1;
+        //}
+        lookAt = m_PlayerList.GetPlayerByIndex(m_PlayerIndex).transform;
+
+
+    }
+
 }
