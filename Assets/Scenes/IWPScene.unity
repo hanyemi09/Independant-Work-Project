@@ -906,7 +906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7994536403073692604, guid: 2aa1766a4de79a74fbe1da8850cc3f6d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -12
       objectReference: {fileID: 0}
     - target: {fileID: 7994536403073692604, guid: 2aa1766a4de79a74fbe1da8850cc3f6d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1516,7 +1516,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7994536403073692604, guid: 2aa1766a4de79a74fbe1da8850cc3f6d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 7994536403073692604, guid: 2aa1766a4de79a74fbe1da8850cc3f6d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1802,6 +1802,14 @@ PrefabInstance:
     - target: {fileID: 3953751681289766371, guid: 7a9064bd440d4c44996078e8ec7ab2d8, type: 3}
       propertyPath: m_Name
       value: NextSpec
+      objectReference: {fileID: 0}
+    - target: {fileID: 3953751681289766371, guid: 7a9064bd440d4c44996078e8ec7ab2d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3953751681289766371, guid: 7a9064bd440d4c44996078e8ec7ab2d8, type: 3}
+      propertyPath: m_TagString
+      value: Spectator
       objectReference: {fileID: 0}
     - target: {fileID: 3953751681289766373, guid: 7a9064bd440d4c44996078e8ec7ab2d8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -2138,6 +2146,14 @@ PrefabInstance:
     - target: {fileID: 8822896002325690732, guid: 5896492cbad42e34b824267bb472c71f, type: 3}
       propertyPath: m_Name
       value: PreviousSpec
+      objectReference: {fileID: 0}
+    - target: {fileID: 8822896002325690732, guid: 5896492cbad42e34b824267bb472c71f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8822896002325690732, guid: 5896492cbad42e34b824267bb472c71f, type: 3}
+      propertyPath: m_TagString
+      value: Spectator
       objectReference: {fileID: 0}
     - target: {fileID: 8822896002325690733, guid: 5896492cbad42e34b824267bb472c71f, type: 3}
       propertyPath: m_Pivot.x

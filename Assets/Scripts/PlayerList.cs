@@ -67,5 +67,6 @@ public class PlayerList : MonoBehaviour
     public void RemoveFromList(GameObject Player)
     {
         playerList.Remove(Player);
+        
     }
 }

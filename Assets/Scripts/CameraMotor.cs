@@ -91,14 +91,14 @@ public class CameraMotor : MonoBehaviour
             m_PlayerIndex += 1;
         }
 
-        //if (m_PlayerIndex >= m_PlayerList.GetListLength())
-        //{
-        //    m_PlayerIndex = 0;
-        //}
-        //else
-        //{
-        //    m_PlayerIndex = m_PlayerList.GetListLength() - 1;
-        //}
+        if (m_PlayerIndex >= m_PlayerList.GetListLength())
+        {
+            m_PlayerIndex = 0;
+        }
+        else if(m_PlayerIndex < 0)
+        {
+            m_PlayerIndex = m_PlayerList.GetListLength() - 1;
+        }
         lookAt = m_PlayerList.GetPlayerByIndex(m_PlayerIndex).transform;
 
 

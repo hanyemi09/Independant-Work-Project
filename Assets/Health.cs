@@ -9,12 +9,14 @@ public class Health : MonoBehaviour
     [SerializeField] float m_OverhealPoints;
     [SerializeField] GameObject m_DamagePopup;
     PhotonView m_PhotonView;
+    PlayerList m_PlayerList;
     // Start is called before the first frame update
     void Start()
     {
         m_HitPoints = m_MaxHitPoints;
         m_HitPoints = 150f;
         m_PhotonView = GetComponent<PhotonView>();
+        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
     }
 
     // Update is called once per frame
@@ -35,7 +37,7 @@ public class Health : MonoBehaviour
             playerWeaponsController.DisableUI();
             CameraMotor camera = GameObject.Find("Main Camera").GetComponent<CameraMotor>();
             camera.SwitchCamera(false);
-            m_PhotonView.RPC("DisableObject", RpcTarget.AllBuffered);
+            m_PhotonView.RPC("DestroyObject", RpcTarget.AllBuffered);
 
         }
     }
@@ -75,6 +77,7 @@ public class Health : MonoBehaviour
     [PunRPC]
     void DestroyObject()
     {
+        m_PlayerList.RemoveFromList(this.gameObject);
         PhotonNetwork.Destroy(gameObject);
     }
 

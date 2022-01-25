@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Block
   - Projectile
+  - Spectator
   layers:
   - Default
   - TransparentFX

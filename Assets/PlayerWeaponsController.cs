@@ -53,7 +53,15 @@ public class PlayerWeaponsController : MonoBehaviour
     {
         for(int i = 0; i < UICanvas.transform.childCount; i++)
         {
-            UICanvas.transform.GetChild(i).gameObject.SetActive(false);
+            GameObject temp = UICanvas.transform.GetChild(i).gameObject;
+            if (temp.tag != "Spectator")
+            {
+                temp.SetActive(false);
+            }
+            else
+            {
+                temp.SetActive(true);
+            }
         }
     }
 
