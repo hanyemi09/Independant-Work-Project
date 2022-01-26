@@ -19,10 +19,15 @@ public class SpawnPlayers : MonoBehaviour
 
     void Start()
     {
-        
-        PlayerWeaponsController player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoints[m_PlayerList.GetListLength() - 1].transform.position, Quaternion.identity).GetComponent<PlayerWeaponsController>();
-        int i = player.gameObject.GetComponent<PhotonView>().ViewID;
-        m_PhotonView.RPC("SetPlayersStartingPosition", RpcTarget.AllBuffered, i );
+
+        PlayerWeaponsController player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoints[m_Index].transform.position, Quaternion.identity).GetComponent<PlayerWeaponsController>();
+
+    }
+
+    [PunRPC]
+    public void IncreaseIndex()
+    {
+        m_Index++;
 
     }
 

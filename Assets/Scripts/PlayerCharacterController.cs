@@ -44,6 +44,7 @@ public class PlayerCharacterController : MonoBehaviour
         m_PlayerHealthBar = GameObject.Find("HealthBar").GetComponent<PlayerHealthBar>();
         m_GroundCheck = gameObject.transform.GetChild(1).gameObject.GetComponent<Transform>();
         m_SpawnPlayers = GameObject.Find("EventSystem").GetComponent<SpawnPlayers>();
+        //m_SpawnPlayers.GetComponent<PhotonView>().RPC("IncreaseIndex", RpcTarget.All);
 
 
 

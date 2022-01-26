@@ -17,10 +17,7 @@ public class PlayerList : MonoBehaviour
     }
     void Update()
     {
-        if(playerList.Count <= 1)
-        {
-            GameEnd();
-        }
+
     }
 
     public void GameEnd()
@@ -67,6 +64,9 @@ public class PlayerList : MonoBehaviour
     public void RemoveFromList(GameObject Player)
     {
         playerList.Remove(Player);
-        
+        if(playerList.Count <= 1)
+        {
+            GameEnd();
+        }
     }
 }

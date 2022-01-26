@@ -8,6 +8,7 @@ public class PlayerWeaponsController : MonoBehaviour
 {
 
     WeaponController m_CurrentActiveWeapon;
+    //WeaponController[] m_CurrentActiveWeapon = new WeaponController[2];
     bool m_CanPickup;
     Button m_WeaponPickupButton;
     WeaponPickup m_CurrentWeaponPickup;

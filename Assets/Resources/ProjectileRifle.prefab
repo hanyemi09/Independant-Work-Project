@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5245766595463650883}
   - component: {fileID: -9128476695041206741}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: ProjectileRifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1e0ac2fd749fb2547bfac62cd1f1f71c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Speed: 30
-  m_LifeTime: 99
+  m_LifeTime: 10
   m_Damage: 10
   m_DamagePopup: {fileID: 3095084063356652598, guid: 1bae2f3584ad15541a8e3740b8826e3b, type: 3}
 --- !u!54 &-6901523676012992394
