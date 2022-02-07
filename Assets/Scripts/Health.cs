@@ -27,11 +27,16 @@ public class Health : MonoBehaviour
             m_OverhealPoints -= Time.deltaTime * 15f;
         }
 
-        if(m_HitPoints <= 0 && gameObject.layer != 3)
+        if(m_HitPoints <= 0 && gameObject.layer != 3 && gameObject.layer != 13)
         {
             m_PhotonView.RPC("DestroyObject", RpcTarget.AllBuffered);
         }
-        else if(m_HitPoints <= 0 && gameObject.layer == 3)
+        else if(m_HitPoints <= 0 && gameObject.layer != 3 && gameObject.layer == 13)
+        {
+            GetComponent<PowerupsSpawn>();
+            m_PhotonView.RPC("SpawnPowerup", RpcTarget.All);
+        }
+        else if(m_HitPoints <= 0 && gameObject.layer == 3 && gameObject.layer != 13)
         {
             PlayerWeaponsController playerWeaponsController = GetComponent<PlayerWeaponsController>();
             playerWeaponsController.DisableUI();

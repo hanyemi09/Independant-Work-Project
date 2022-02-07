@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class PlayerWeaponsController : MonoBehaviour
 {
 
-    WeaponController m_CurrentActiveWeapon;
-    //WeaponController[] m_CurrentActiveWeapon = new WeaponController[2];
+    WeaponController[] m_WeaponSlots = new WeaponController[2];
     bool m_CanPickup;
     Button m_WeaponPickupButton;
+    Button m_WeaponSwapButton;
     WeaponPickup m_CurrentWeaponPickup;
     GameObject m_WeaponHolder;
     GameObject m_ShootPoint;
@@ -18,6 +18,7 @@ public class PlayerWeaponsController : MonoBehaviour
     PlayerList m_PlayerList;
     WeaponHUDManager m_WeaponHUDManager;
     WeaponController.WeaponType m_CurrentActiveWeaponType;
+    int m_CurrentActiveWeaponIndex = -1;
     Canvas UICanvas;
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,14 @@ public class PlayerWeaponsController : MonoBehaviour
         m_ShootPoint = gameObject.transform.GetChild(0).gameObject;
         m_WeaponHolder = gameObject.transform.GetChild(2).gameObject;
         m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+        m_WeaponSlots[0] = m_WeaponHolder.transform.GetChild(0).gameObject.GetComponent<WeaponController>();
+        m_WeaponSwapButton = GameObject.Find("WeaponSwap").GetComponent<Button>();
+        m_WeaponSwapButton.onClick.AddListener(SwitchWeapon);
+        if(m_WeaponSlots[0] != null)
+        {
+            m_CurrentActiveWeaponIndex = 0;
+            m_CurrentActiveWeaponType = m_WeaponSlots[m_CurrentActiveWeaponIndex].GetWeaponType();
+        }
     }
 
     public void Initialize()
@@ -42,7 +51,7 @@ public class PlayerWeaponsController : MonoBehaviour
         m_WeaponPickupButton.onClick.AddListener(PickupWeapon);
         m_ShootPoint = gameObject.transform.GetChild(0).gameObject;
         m_WeaponHolder = gameObject.transform.GetChild(2).gameObject;
-        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();
+        m_PlayerList = GameObject.Find("EventSystem").GetComponent<PlayerList>();   
     }
     // Update is called once per frame
     void Update()
@@ -69,15 +78,67 @@ public class PlayerWeaponsController : MonoBehaviour
     [PunRPC]
     public void AddWeapon(string weaponToAdd)
     {
-        if (m_CurrentActiveWeapon != null)
+        if (m_WeaponSlots[1] != null)
         {
-            DropWeapon(m_CurrentActiveWeapon);
+            DropWeapon(m_WeaponSlots[1]);
         }
-        m_CurrentActiveWeapon = PhotonNetwork.Instantiate(weaponToAdd, m_WeaponHolder.transform.position, Quaternion.identity).GetComponent<WeaponController>();
-        m_CurrentActiveWeaponType = m_CurrentActiveWeapon.GetWeaponType();
+        m_PhotonView.RPC("DisableCurrentActiveWeapon", RpcTarget.All);
+        m_WeaponSlots[1] = PhotonNetwork.Instantiate(weaponToAdd, m_WeaponHolder.transform.position, Quaternion.identity).GetComponent<WeaponController>();
+        m_WeaponSlots[1].SetPhotonView(m_PhotonView);
+        m_WeaponSlots[1].Initialize();
         m_WeaponPickupButton.gameObject.SetActive(false);
-        m_CurrentActiveWeapon.SetPhotonView(m_PhotonView);
-        m_CurrentActiveWeapon.Initialize();
+        m_PhotonView.RPC("DisableWeapon", RpcTarget.All, 1);
+
+    }
+    [PunRPC]
+    public void DisableWeapon(int index)
+    {
+        if(m_WeaponSlots[index] != null)
+        {
+            m_WeaponSlots[index].gameObject.SetActive(false);
+        }
+    }
+
+    [PunRPC]
+    public void SwitchWeapon()
+    {
+        m_WeaponSlots[m_CurrentActiveWeaponIndex].gameObject.SetActive(false);
+        m_CurrentActiveWeaponType = WeaponController.WeaponType.NONE;
+        int tempIndex = m_CurrentActiveWeaponIndex;
+        m_CurrentActiveWeaponIndex = -1;
+        if (tempIndex == 0)
+        {
+            tempIndex = 1;
+        }
+        else
+        {
+            tempIndex = 0;
+        }
+        m_WeaponSlots[tempIndex].gameObject.SetActive(true);
+        m_CurrentActiveWeaponIndex = tempIndex;
+        m_CurrentActiveWeaponType = m_WeaponSlots[tempIndex].GetWeaponType();
+    }
+
+    [PunRPC]
+    public void DisableCurrentActiveWeapon()
+    {
+        if(m_CurrentActiveWeaponIndex != 0)
+        {
+            m_WeaponSlots[m_CurrentActiveWeaponIndex].gameObject.SetActive(false);
+            m_CurrentActiveWeaponIndex = -1;
+            m_CurrentActiveWeaponType = WeaponController.WeaponType.NONE;
+        }
+        SwitchToWeapon(0);
+    }
+
+    [PunRPC]
+    public void SwitchToWeapon(int index)
+    {
+        m_CurrentActiveWeaponIndex = index;
+        m_WeaponSlots[m_CurrentActiveWeaponIndex].gameObject.SetActive(true);
+        m_CurrentActiveWeaponType = m_WeaponSlots[m_CurrentActiveWeaponIndex].GetWeaponType();
+        m_WeaponHUDManager.OnWeaponSwitched(m_WeaponSlots[m_CurrentActiveWeaponIndex]);
+
     }
 
     [PunRPC]
@@ -88,12 +149,17 @@ public class PlayerWeaponsController : MonoBehaviour
 
     public void DropWeapon(WeaponController weaponToDrop)
     {
-        WeaponController weap = weaponToDrop;
-        weaponToDrop.SpawnWeaponPickup(transform);
-        Destroy(m_CurrentActiveWeapon.gameObject);
-        m_CurrentActiveWeapon = null;
-        m_CurrentActiveWeaponType = WeaponController.WeaponType.NONE;
-        m_WeaponHUDManager.OnWeaponSwitched(m_CurrentActiveWeapon);
+        if(weaponToDrop == m_WeaponSlots[1])
+        {
+            WeaponController weap = weaponToDrop;
+            weaponToDrop.SpawnWeaponPickup(transform);
+            Destroy(m_WeaponSlots[1].gameObject);
+            m_CurrentActiveWeaponIndex = 0;
+            m_WeaponSlots[1] = null;
+            m_CurrentActiveWeaponType = WeaponController.WeaponType.NONE;
+            m_WeaponHUDManager.OnWeaponSwitched(m_WeaponSlots[1]);
+        }
+        m_PhotonView.RPC("SwitchToWeapon", RpcTarget.All, 0);
     }
 
     public void CanPickupWeapon(bool flag, WeaponPickup weaponPickup)
@@ -109,6 +175,9 @@ public class PlayerWeaponsController : MonoBehaviour
             return;
 
         Debug.Log("Picking up weapon");
+        if (m_CurrentWeaponPickup == null)
+            return;
+
         PhotonView pv = m_CurrentWeaponPickup.GetComponent<PhotonView>();
         if(pv != null)
         {
@@ -118,8 +187,8 @@ public class PlayerWeaponsController : MonoBehaviour
         {
             string weaponName = m_CurrentWeaponPickup.GetWeaponPrefab().name;
             AddWeapon(weaponName);
-            m_PhotonView.RPC("SetWeaponParent", RpcTarget.All, m_CurrentActiveWeapon.GetPhotonView().ViewID, m_PhotonView.ViewID);
-            m_WeaponHUDManager.OnWeaponSwitched(m_CurrentActiveWeapon);
+            m_PhotonView.RPC("SetWeaponParent", RpcTarget.All, m_WeaponSlots[1].GetPhotonView().ViewID, m_PhotonView.ViewID);
+            m_WeaponHUDManager.OnWeaponSwitched(m_WeaponSlots[1]);
         }
         CanPickupWeapon(false, null);
     }
@@ -127,26 +196,26 @@ public class PlayerWeaponsController : MonoBehaviour
     public void HandleShoot(Vector3 direction)
     {
         Debug.Log("Handling Shoot");
-        if (m_CurrentActiveWeapon == null)
+        if (m_WeaponSlots == null)
             return;
 
         //PhotonView pv = m_CurrentActiveWeapon.gameObject.GetComponent<PhotonView>();
         //pv.RPC("TryShoot", RpcTarget.All, direction, m_ShootPoint.transform.position);
-        m_CurrentActiveWeapon.TryShoot(direction, m_ShootPoint.transform);
-        m_WeaponHUDManager.UpdateCurrentAmmo(m_CurrentActiveWeapon);
+        m_WeaponSlots[m_CurrentActiveWeaponIndex].TryShoot(direction, m_ShootPoint.transform);
+        m_WeaponHUDManager.UpdateCurrentAmmo(m_WeaponSlots[m_CurrentActiveWeaponIndex]);
     }
 
     public void HandleAddAmmo(int ammoAmount)
     {
-        if(m_CurrentActiveWeapon != null && m_CurrentActiveWeaponType == WeaponController.WeaponType.RANGED)
+        if(m_WeaponSlots != null && m_CurrentActiveWeaponType == WeaponController.WeaponType.RANGED)
         {
-            m_CurrentActiveWeapon.TryAddAmmo(ammoAmount);
-            m_WeaponHUDManager.UpdateTotalAmmo(m_CurrentActiveWeapon);
+            m_WeaponSlots[m_CurrentActiveWeaponIndex].TryAddAmmo(ammoAmount);
+            m_WeaponHUDManager.UpdateTotalAmmo(m_WeaponSlots[m_CurrentActiveWeaponIndex]);
         }
     }
 
     public WeaponController GetCurrentActiveWeapon()
     {
-        return m_CurrentActiveWeapon;
+        return m_WeaponSlots[m_CurrentActiveWeaponIndex];
     }
 }

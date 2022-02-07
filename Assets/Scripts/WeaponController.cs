@@ -34,7 +34,9 @@ public class WeaponController : MonoBehaviour
     PhotonView m_MyPlayerPhotonView;
     float m_TimeSinceLastFired;
     int m_CurrentClipAmmo;
-
+    bool m_IsAnimationPlaying;
+    [SerializeField] float m_ComboAvailableLength;
+    bool m_ComboAvailable;
     int m_PunchCombo = 0;
 
     // Start is called before the first frame update
@@ -99,23 +101,37 @@ public class WeaponController : MonoBehaviour
                 m_PunchCombo = 0;
             }
             m_TimeSinceLastFired = 0f;
-            GetComponent<Collider>().enabled = true;
+            //00GetComponent<Collider>().enabled = true;
 
-            if(m_PunchCombo == 0)
+
+            if(m_IsAnimationPlaying == false)
             {
-                m_Animator.SetTrigger("FirstPunch");
-                m_PunchCombo = 1;
+                if (m_PunchCombo == 0)
+                {
+                    m_Animator.SetTrigger("FirstPunch");
+                    m_PunchCombo = 1;
+                    StartCoroutine(PlayMeleeAnimation());
+                }
+                else if (m_PunchCombo == 1)
+                {
+                    if(m_ComboAvailable)
+                    {
+                        m_Animator.SetTrigger("SecondPunch");
+                        m_PunchCombo = 2;
+                        StartCoroutine(PlayMeleeAnimation());
+                    }
+                }
+                else if (m_PunchCombo == 2)
+                {
+                    if(m_ComboAvailable)
+                    {
+                        m_Animator.SetTrigger("ThirdPunch");
+                        m_PunchCombo = 0;
+                        StartCoroutine(PlayMeleeAnimation());
+                    }
+                }
             }
-            else if(m_PunchCombo == 1)
-            {
-                m_Animator.SetTrigger("SecondPunch");
-                m_PunchCombo = 2;
-            }
-            else if(m_PunchCombo == 2)
-            {
-                m_Animator.SetTrigger("ThirdPunch");
-                m_PunchCombo = 0;
-            }
+
 
             //StartCoroutine(PlayMeleeAnimation());
         }
@@ -125,7 +141,14 @@ public class WeaponController : MonoBehaviour
 
     IEnumerator PlayMeleeAnimation()
     {
-        yield return new WaitForSeconds(m_Animator.GetCurrentAnimatorStateInfo(0).length);
+        m_IsAnimationPlaying = true;
+        //yield return new WaitForSeconds(m_Animator.GetCurrentAnimatorStateInfo(0).length);
+        yield return new WaitForSeconds(0.6f);
+        m_IsAnimationPlaying = false;
+        m_ComboAvailable = true;
+        yield return new WaitForSeconds(m_ComboAvailableLength);
+        m_ComboAvailable = false;
+
     }
     public void TryReload()
     {

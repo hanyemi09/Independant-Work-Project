@@ -20,7 +20,7 @@ public class SpawnPlayers : MonoBehaviour
     void Start()
     {
 
-        PlayerWeaponsController player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoints[m_Index].transform.position, Quaternion.identity).GetComponent<PlayerWeaponsController>();
+        PlayerWeaponsController player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoints[PhotonNetwork.PlayerList.Length].transform.position, Quaternion.identity).GetComponent<PlayerWeaponsController>();
 
     }
 

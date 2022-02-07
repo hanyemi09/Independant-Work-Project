@@ -69,6 +69,10 @@ MonoBehaviour:
   - InitializeID
   - SetPlayersStartingPosition
   - IncreaseIndex
+  - DisableCurrentActiveWeapon
+  - SwitchToWeapon
+  - SwitchWeapon
+  - DisableWeapon
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

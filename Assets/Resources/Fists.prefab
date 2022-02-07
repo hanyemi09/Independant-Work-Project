@@ -182,7 +182,7 @@ MonoBehaviour:
   m_FullReloadTiming: 0.5
   m_TotalAmmo: 0
   m_Animator: {fileID: 933478442236580780}
-  m_Animation: {fileID: 0}
+  m_ComboAvailableLength: 1
 --- !u!114 &7026485572536516713
 MonoBehaviour:
   m_ObjectHideFlags: 0
